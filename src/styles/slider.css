@@ -1,0 +1,127 @@
+
+.slider {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 6rem 0;
+  position: relative;
+  background: none;
+  padding: 0;
+}
+
+.slider-wrapper {
+  overflow: hidden;
+  width: 90%;
+  max-width: 1500px;
+  background: linear-gradient(135deg, var(--background), var(--orange-color));
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.slider-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.slider-card {
+  flex: 0 0 calc(100% / 2);
+  padding: 1rem;
+  box-sizing: border-box;
+  text-align: center;
+  color: white;
+  border-radius: 1.5rem;
+  margin: 0 0.5rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  transition: background 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(6px);
+}
+
+.slider-card:hover {
+  background: var(--card-bg-hover);
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
+.slider-card img {
+  border-radius: 1rem;
+}
+
+.slider-card-text h3 {
+  color: var(--orange-color);
+  margin-top: 1rem;
+  font-size: 1.25rem;
+}
+
+.slider-card-text p {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: #e0e0e0;
+  line-height: 1.5;
+}
+
+.slider-arrow {
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.3s ease;
+}
+
+.slider-arrow.left,
+.slider-arrow.right {
+  transform: translateY(-50%);
+}
+
+.slider-arrow-svg {
+  transition: transform 0.3s ease;
+  fill: var(--orange-color);
+}
+
+.slider-arrow-svg:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 6px var(--orange-color));
+}
+/*mouais + scale au click?*/
+
+.arrow-right:active{
+  animation: slider-moove-ball-right 0.25s ease-in-out forwards;
+}
+
+.arrow-left:active{
+  animation: slider-moove-ball-left 0.25s ease-in-out forwards;
+}
+
+.slider-arrow-svg:hover .arrow-fill {
+  fill: var(--orange-color);
+}
+
+@media (max-width: 800px) {
+  .slider-arrow {
+    position: absolute;
+    top: -40px;
+    z-index: 20;
+    transform-origin: center;
+    transition: transform 0.3s ease;
+  }
+  .slider-arrow.left {
+    left: 20%;
+    top: -15%;
+    transform: scale(0.66);
+  }
+  .slider-arrow.right {
+    right: 20%;
+    top: -15%;
+    transform: scale(0.66);
+  }
+  .slider-wrapper {
+    overflow: hidden;
+    width: 90%;
+    max-width: 1500px;
+    background: linear-gradient(135deg, var(--background), var(--orange-color));
+    padding: 2rem 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+}

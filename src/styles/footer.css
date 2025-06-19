@@ -1,0 +1,49 @@
+.site-footer {
+    background-color: var(--main-color);
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 6rem;
+}
+p{
+    color: var(--background);
+}
+.footer-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.footer-section {
+    min-width: 150px;
+}
+
+.footer-section h4 {
+    margin-bottom: 1rem;
+    color: var(--orange-color);
+}
+
+a:hover img {
+    transform: scale(1.1);
+}
+
+.partner-logos img {
+    margin: 5px;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.footer-logo {
+    margin-top: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.footer-logo:hover{
+    transform: scale(1.1);
+    transform: rotate(3deg);
+}

@@ -1,0 +1,48 @@
+:root {
+  --main-color: #f7f7f7;
+  --background: #1a1a1a;
+  --background-soft: #2a2a2a;
+  --foreground: #000301;
+  --orange-color: #E26010;
+  --card-border: rgba(0, 0, 0, 0.1);
+    --card-bg: #ffffff10;
+  --card-bg-hover: #ffffff20;
+}
+
+html{
+  overflow-x: hidden;
+}
+
+/* @media (prefers-color-scheme: light) {
+  :root {
+  --main-color: #1a1a1a;
+  --background: #f7f7f7;
+  --background-soft: #ffffff;
+  --foreground: #000301;
+  --orange-color: #E26010;
+  --card-border: rgba(0, 0, 0, 0.1);
+  --card-bg: #ffffff10;
+  --card-bg-hover: #ffffff20;
+  }
+} */
+
+body {
+  /* background-color: var(--background); */
+  background: linear-gradient(145deg, var(--background), var(--background-soft));
+  color: var(--main-color);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+h2, p{
+  color: var(--main-color);
+}
+
+/* TODO
+- check colours and light theme
+- page actual build html
+- add/remove/edit json
+- others pages
+- section member -> auth google
+*/

@@ -1,0 +1,59 @@
+[
+    {
+        "title": "Actus1",
+        "resume": "resume",
+        "images": [
+            {
+                "src": "/assets/images/partenaires/addict.png",
+                "alt": "Actus1 Image"
+            },
+            {
+                "src": "/assets/images/partenaires/bagarre.png",
+                "alt": "Actus1 Image 2"
+            }
+        ],
+        "description": "description",
+        "link": {
+            "url": "https://example.com/actus1",
+            "text": "Lire plus"
+        }
+    },
+    {
+        "title": "Actus2",
+        "resume": "resume",
+        "images": [
+            {
+                "src": "/assets/images/partenaires/cookie.png",
+                "alt": "Actus2 Image"
+            },
+            {
+                "src": "/assets/images/partenaires/ufips.jpg",
+                "alt": "Actus2 Image 2"
+            }
+        ],
+        "description": "description",
+        "link": {
+            "url": "https://example.com/actus1",
+            "text": "Lire plus"
+        }
+    },
+    {
+        "title": "Actus3",
+        "resume": "resume",
+        "images": [
+            {
+                "src": "/assets/images/partenaires/addict.png",
+                "alt": "Actus3 Image"
+            },
+            {
+                "src": "/assets/images/partenaires/bagarre.png",
+                "alt": "Actus3 Image 2"
+            }
+        ],
+        "description": "description",
+        "link": {
+            "url": "https://example.com/actus1",
+            "text": "Lire plus"
+        }
+    }
+]

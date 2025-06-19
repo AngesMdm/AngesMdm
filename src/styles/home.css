@@ -1,0 +1,249 @@
+.hero-section {
+  position: relative;
+  height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4rem;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url('/assets/images/pp.jpeg') no-repeat center center;
+  background-size: cover;
+  animation: zoomOut 1.5s ease-in-out forwards;
+  transform: scale(1.1);
+  z-index: 1;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 2;
+}
+
+.hero-title {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: bold;
+  padding: 2rem;
+  text-shadow: 0 0 10px rgba(226, 96, 16, 0.7);
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  margin-top: 4rem;
+}
+
+
+  /* border-radius: 2px;
+  border-left: 2px solid var(--card-border);
+  border-right: 2px solid var(--card-border); */
+/*
+.card {
+  width: 400px;
+  height: 600px;
+  background-size: 110%;
+  background-position: center;
+  transition: background-size 0.4s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px black;
+  overflow: hidden;
+}
+
+.card:hover {
+    background-size: 120%;
+    filter: drop-shadow(0 0 10px var(--orange-color));
+}
+
+.card.gauche {
+  background-image: url('../../public/assets/images/foot.png');
+}
+
+.card.face {
+  background-image: url('../../public/assets/images/cheer.png');
+}
+
+.card.droite {
+  background-image: url('../../public/assets/images/flag.png');
+}
+*/
+
+.card {
+  width: 400px;
+  height: 600px;
+  background-size: 110%;
+  background-position: center;
+  transition: transform 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px black;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 10px var(--orange-color));
+}
+
+.card.gauche {
+  background: url('../../public/assets/images/foot.png') no-repeat;
+}
+
+.card.face {
+  background: url('../../public/assets/images/cheer.png') no-repeat;
+}
+
+.card.droite {
+  background: url('../../public/assets/images/flag.png') no-repeat ;
+}
+
+
+.team-section {
+  margin-top: 10rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 4rem;
+  color: var(--main-color);
+  text-shadow: 1px 1px 2px #000;
+}
+
+.team-scroll-container {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+.team-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--foregroun);
+  border-radius: 16px;
+  overflow: hidden;
+  width: 350px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all 0.6s ease;
+}
+
+.team-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.team-image {
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+}
+
+.team-content {
+  padding: 1.5rem;
+  color: white;
+}
+
+.team-content h3 {
+  margin-top: 0;
+  font-size: 1.8rem;
+  color: var(--orange-color);
+}
+
+.team-content p {
+  font-size: 1rem;
+  color: var(--main-color);
+}
+
+
+@keyframes slider-moove-ball-right{
+    0% {
+      transform: translate3d(0, 0);
+    }
+    50% {
+      transform: translate3d(42px, -62px, -135px);
+    }
+    100% {
+      transform: translate3d(0, 0);
+    }
+}
+
+@keyframes slider-moove-ball-left{
+    0% {
+      transform: translate3d(0, 0);
+    }
+    50% {
+      transform: translate3d(-42px, -62px, -135px);
+    }
+    100% {
+      transform: translate3d(0, 0);
+    }
+}
+
+@keyframes zoomOut {
+    from {
+        transform: scale(1.1);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes scrollLeft{
+    0% {
+        transform: translateX(-250%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes scrollRight{
+    0% {
+        transform: translateX(250%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes scrollLeft2{
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-250%);
+    }
+}
+
+@keyframes scrollRight2{
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(250%);
+    }
+}
