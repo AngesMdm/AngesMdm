@@ -208,6 +208,7 @@ export default function Home() {
       </section>
 
       <section className="slider">
+        <h2 className="section-title">L'Actualité</h2>
         <div className="slider-arrow left" onClick={() => slide(-1)}>
           <ArrowBallLeft width={90} height={90} className="slider-arrow-svg arrow-left" />
         </div>
