@@ -26,9 +26,23 @@ const exampleData: Folder = {
     children: [
         {
             id: "folder1",
-            name: "Vidéos",
+            name: "Photos et Vidéos",
             type: "folder",
             children: [
+                {
+                    id: "folder1-1",
+                    name: "Vidéos",
+                    type: "folder",
+                    children: [
+                        {
+                            id: "vid2",
+                            name: "penta zed.mp4",
+                            type: "file",
+                            fileType: "video",
+                            url: "/assets/images/penta zed (2).mp4",
+                        },
+                    ],
+                },
                 {
                     id: "img1",
                     name: "le logo la.jpg",

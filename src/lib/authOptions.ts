@@ -13,11 +13,20 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user }) {
       const email = user.email;
 
+      const test = await Query(
+        'SELECT * FROM authorized_emails'
+      );
+      console.log(test.rows)
+      console.log(test)
+
       const authorized = await Query(
         'SELECT * FROM authorized_emails WHERE email = $1',
         [email]
       );
-      if (authorized.rowCount === 0) return false;
+      if (authorized.rowCount === 0){
+        console.log("Unauthorized email:", email);
+        return false;
+      } 
 
       const existingUser = await Query('SELECT * FROM users WHERE email = $1', [email]);
       if (existingUser.rowCount === 0) {
