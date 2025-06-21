@@ -1,7 +1,7 @@
 "use client";
 import { memo, useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { HOME_ROUTE, FLAG_ROUTE, FOOT_ROUTE, CHEER_ROUTE, LOGIN_ROUTE, DRIVE_ROUTE } from "@/constants/app.route.const";
+import { HOME_ROUTE, FLAG_ROUTE, FOOT_ROUTE, CHEER_ROUTE, LOGIN_ROUTE, DRIVE_ROUTE, STAFF_ROUTE, BUREAU_ROUTE } from "@/constants/app.route.const";
 import { useSession, signOut } from "next-auth/react";
 
 export const Header = memo(() => {
@@ -90,6 +90,8 @@ export const Header = memo(() => {
                             <a href={FOOT_ROUTE} className="nav-link">Foot</a>
                             <a href={CHEER_ROUTE} className="nav-link">Cheer</a>
                             <a href={FLAG_ROUTE} className="nav-link">Flag</a>
+                            <a href={STAFF_ROUTE} className="nav-link">Staff</a>
+                            <a href={BUREAU_ROUTE} className="nav-link">Bureau</a>
                         </>
                     )}
                 </div>
@@ -123,9 +125,11 @@ export const Header = memo(() => {
                     <a href={FLAG_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Flag</a>
                     <a href={FOOT_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Foot</a>
                     <a href={CHEER_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Cheer</a>
+                    <a href={STAFF_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Staff</a>
+                    <a href={BUREAU_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Bureau</a>
                     {session?.user ? (
                         <>
-                            <a href="/user/drive" className="dropdown-item" onClick={closeMobileMenu}>Drive</a>
+                            <a href={DRIVE_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Drive</a>
                             <button onClick={() => { signOut(); closeMobileMenu(); }} className="dropdown-item">Se déconnecter</button>
                         </>
                     ) : (

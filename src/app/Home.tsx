@@ -162,7 +162,12 @@ export default function Home() {
                                 const titles = ["Foot", "Cheer", "Flag"];
                                 const classes = ["gauche", "face", "droite"];
                                 return (
-                                    <a key={i} href="" className={`card-link card ${classes[i]}`} style={{ textDecoration: "none", color: "white" }}>
+                                    <a
+                                        key={i}
+                                        href={i === 0 ? FOOT_ROUTE : i === 1 ? CHEER_ROUTE : FLAG_ROUTE}
+                                        className={`card-link card ${classes[i]}`}
+                                        style={{ textDecoration: "none", color: "white" }}
+                                    >
                                         <h3 style={{ margin: 0 }}>{titles[i]}</h3>
                                     </a>
                                 );
