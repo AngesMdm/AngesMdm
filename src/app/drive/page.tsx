@@ -36,10 +36,10 @@ const exampleData: Folder = {
                     children: [
                         {
                             id: "vid2",
-                            name: "penta zed.mp4",
+                            name: "oui.mp4",
                             type: "file",
                             fileType: "video",
-                            url: "/assets/images/penta zed (2).mp4",
+                            url: "/assets/images/oui.mp4",
                         },
                     ],
                 },
@@ -52,10 +52,10 @@ const exampleData: Folder = {
                 },
                 {
                     id: "vid1",
-                    name: "quintuplé zed.mp4",
+                    name: "oui.mp4",
                     type: "file",
                     fileType: "video",
-                    url: "/assets/images/penta zed (2).mp4",
+                    url: "/assets/images/oui.mp4",
                 },
             ],
         },
@@ -111,7 +111,7 @@ export default function Drive() {
     }
 
     return (
-        <main style={{ padding: "1rem", marginTop: "5rem" }}>
+        <main style={{ padding: "1rem", marginTop: "5rem", height: "700px" }}>{/* heigt tempoaire */}
             <h1>Mon Drive</h1>
 
             <div style={{ marginBottom: "1rem", display: "flex", alignItems: "center", gap: "1rem" }}>

@@ -8,8 +8,8 @@ export const Footer = memo(() => {
             <div className="footer-container">
                 <div className="footer-section">
                     <h4>Contact</h4>
-                    <p>Email : contact@anges-foot.com</p>
-                    <p>Téléphone : 01 23 45 67 89</p>
+                    <p>Email : anges.mdm@gmail.com</p>
+                    <p>Téléphone : 06 19 02 33 47</p>
                 </div>
 
                 <div className="footer-section">
@@ -18,6 +18,8 @@ export const Footer = memo(() => {
 
                         <a href="https://www.instagram.com/anges.mdm/"><Image src="/assets/icons/instagram.png" alt="Instagram" width={40} height={40} /></a>
                         <a href="https://www.facebook.com/anges.mdm/"><Image src="/assets/icons/facebook.png" alt="Facebook" width={40} height={40} /></a>
+                        <a href="https://www.tiktok.com/@anges.mdm/"><Image src="/assets/icons/tiktok.png" alt="TikTok" width={40} height={40} /></a>
+                        <a href="https://www.youtube.com/@angesmontdemarsan9931/"><Image src="/assets/icons/youtube.png" alt="Youtube" width={45} height={40} /></a>
                     </div>
                 </div>
 

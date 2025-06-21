@@ -14,7 +14,6 @@ export default function RootLayout({
     <html lang="en">
       <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-      <title>Anges</title>
       <body style={{ margin: 0, padding: 0, fontFamily: 'Arial, sans-serif' }}>
         <Providers>
           <Header />

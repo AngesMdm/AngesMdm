@@ -39,10 +39,15 @@ h2, p{
   color: var(--main-color);
 }
 
-/* TODO
-- check colours and light theme
-- page actual build html
-- add/remove/edit json
-- others pages
-- section member -> auth google
+/*
+TODO
+- Images : foot/flag/cheer; kal/Mag/Mateo/Mams/Thomas/Remis
+- Actus
+- Foot : css pour att/def/speTeam
+- Cheer : css pour card
+si image vertical, alors changer le slider
+
+- light theme
+- drive
+- edit actus
 */

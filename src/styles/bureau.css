@@ -1,0 +1,88 @@
+.bureau-wrapper {
+  padding: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.bureau-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 6rem 2rem;
+  width: 100%;
+  max-width: 1400px;
+  justify-content: center;
+}
+
+@media screen and (min-width: 1200px) {
+  .bureau-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 1199px) and (min-width: 768px) {
+  .bureau-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .bureau-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bureau-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: none;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.bureau-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bureau-image {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center 40%;
+  margin-bottom: 1rem;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
+}
+
+.bureau-image:hover{
+  transform: scale(1.2) !important;
+  transition: transform 0.3s ease;
+}
+
+.bureau-image.fix-top {
+  background-position: center 30%;
+  background-size: 90%;
+}
+
+.bureau-card.is-visible .bureau-image {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.bureau-name {
+  font-size: 1.8rem;
+  color: white;
+  font-weight: bold;
+}
+
+.bureau-role {
+  font-size: 1.3rem;
+  color: var(--orange-color);
+  font-weight: 600;
+}

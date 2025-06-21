@@ -1,7 +1,7 @@
 "use client";
 import { memo, useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { HOME_ROUTE, FLAG_ROUTE, FOOT_ROUTE, CHEER_ROUTE, LOGIN_ROUTE, } from "@/constants/app.route.const";
+import { HOME_ROUTE, FLAG_ROUTE, FOOT_ROUTE, CHEER_ROUTE, LOGIN_ROUTE, DRIVE_ROUTE } from "@/constants/app.route.const";
 import { useSession, signOut } from "next-auth/react";
 
 export const Header = memo(() => {
@@ -18,7 +18,7 @@ export const Header = memo(() => {
     useEffect(() => {
         const handleScroll = () => {
             const currentScroll = window.scrollY;
-            if (currentScroll > prevScroll.current && currentScroll > 300) {
+            if (currentScroll > prevScroll.current && currentScroll > 100) {
                 setHidden(true);
             } else {
                 setHidden(false);
@@ -87,9 +87,9 @@ export const Header = memo(() => {
                     )}
                     {!isMobile && (
                         <>
-                            <a href={FLAG_ROUTE} className="nav-link">Flag</a>
                             <a href={FOOT_ROUTE} className="nav-link">Foot</a>
                             <a href={CHEER_ROUTE} className="nav-link">Cheer</a>
+                            <a href={FLAG_ROUTE} className="nav-link">Flag</a>
                         </>
                     )}
                 </div>
@@ -104,7 +104,7 @@ export const Header = memo(() => {
                                     </button>
                                     {menuOpen && (
                                         <div className="user-dropdown">
-                                            <a href="/user/drive" className="dropdown-item">Drive</a>
+                                            <a href={DRIVE_ROUTE} className="dropdown-item">Drive</a>
                                             <button onClick={() => { signOut(); closeMobileMenu(); }} className="dropdown-item">Se déconnecter</button>
                                         </div>
                                     )}
