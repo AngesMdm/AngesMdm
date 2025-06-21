@@ -132,9 +132,9 @@ const teams = [
 ];
 
 const sliderImages = [
-    "/assets/images/foot/galerie/foot1.jpg",
-    "/assets/images/foot/galerie/foot2.jpg",
-    "/assets/images/foot/galerie/foot3.jpg",
-    "/assets/images/foot/galerie/foot4.jpg",
-    "/assets/images/foot/galerie/foot4.jpg",
+    "/assets/images/foot/galerie/foot1.JPG",
+    "/assets/images/foot/galerie/foot2.JPG",
+    "/assets/images/foot/galerie/foot3.JPG",
+    "/assets/images/foot/galerie/foot4.JPG",
+    "/assets/images/foot/galerie/foot4.JPG",
 ];

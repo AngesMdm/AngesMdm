@@ -100,8 +100,8 @@ const positions = [
 ];
 
 const images = [
-    "/assets/images/flag/galerie/flag1.jpg",
-    "/assets/images/flag/galerie/flag2.jpg",
-    "/assets/images/flag/galerie/flag3.jpg",
-    "/assets/images/flag/galerie/flag4.jpg",
+    "/assets/images/flag/galerie/flag1.JPG",
+    "/assets/images/flag/galerie/flag2.JPG",
+    "/assets/images/flag/galerie/flag3.JPG",
+    "/assets/images/flag/galerie/flag4.JPG",
 ];

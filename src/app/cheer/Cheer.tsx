@@ -64,8 +64,8 @@ const disciplines = [
 ];
 
 const sliderImages = [
-    "/assets/images/cheer/galerie/cheer1.jpg",
-    "/assets/images/cheer/galerie/cheer2.jpg",
-    "/assets/images/cheer/galerie/cheer3.jpg",
-    "/assets/images/cheer/galerie/cheer4.jpg",
+    "/assets/images/cheer/galerie/cheer1.JPG",
+    "/assets/images/cheer/galerie/cheer2.JPG",
+    "/assets/images/cheer/galerie/cheer3.JPG",
+    "/assets/images/cheer/galerie/cheer4.JPG",
 ];
