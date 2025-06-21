@@ -9,7 +9,7 @@ const bureauData = [
     { name: "Chris", role: "Gestion des arbitres", image: "/assets/images/staff&bureau/chris.png", fixTop: true },
     { name: "Rémis", role: "Foot", image: "/assets/images/staff&bureau/remis.png" },
     { name: "Ju", role: "Administratif", image: "/assets/images/staff&bureau/ju.png", fixTop: true },
-    { name: "Vincent", role: "Trésorier", image: "/assets/images/vstaff&bureau/incent.png" },
+    { name: "Vincent", role: "Trésorier", image: "/assets/images/staff&bureau/vincent.png" },
     { name: "Margaux", role: "Cheerleading", image: "/assets/images/staff&bureau/margaux.png" },
     { name: "Nico", role: "Flag", image: "/assets/images/staff&bureau/nico.png" },
 ];

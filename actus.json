@@ -1,56 +1,56 @@
 [
     {
-        "title": "Actus1",
+        "title": "J3 Football américain",
         "resume": "resume",
         "images": [
             {
-                "src": "/assets/images/partenaires/addict.png",
+                "src": "/assets/images/actus/actus1.jpg",
                 "alt": "Actus1 Image"
             },
             {
-                "src": "/assets/images/partenaires/bagarre.png",
+                "src": "/assets/images/actus/actus1.jpg",
                 "alt": "Actus1 Image 2"
             }
         ],
-        "description": "description",
+        "description": "on a gagné",
         "link": {
             "url": "https://example.com/actus1",
             "text": "Lire plus"
         }
     },
     {
-        "title": "Actus2",
+        "title": "J3 Championnat de France Flag football",
         "resume": "resume",
         "images": [
             {
-                "src": "/assets/images/partenaires/cookie.png",
+                "src": "/assets/images/actus/actus2.jpg",
                 "alt": "Actus2 Image"
             },
             {
-                "src": "/assets/images/partenaires/ufips.jpg",
+                "src": "/assets/images/actus/actus2.jpg",
                 "alt": "Actus2 Image 2"
             }
         ],
-        "description": "description",
+        "description": "on a gagné aussi",
         "link": {
             "url": "https://example.com/actus1",
             "text": "Lire plus"
         }
     },
     {
-        "title": "Actus3",
+        "title": "J3 Football américain",
         "resume": "resume",
         "images": [
             {
-                "src": "/assets/images/partenaires/addict.png",
+                "src": "/assets/images/actus/actus1.jpg",
                 "alt": "Actus3 Image"
             },
             {
-                "src": "/assets/images/partenaires/bagarre.png",
+                "src": "/assets/images/actus/actus1.jpg",
                 "alt": "Actus3 Image 2"
             }
         ],
-        "description": "description",
+        "description": "on a encore gagné",
         "link": {
             "url": "https://example.com/actus1",
             "text": "Lire plus"

@@ -70,6 +70,11 @@
   background-size: 90%;
 }
 
+.bureau-image.fix2-top {
+  background-position: center 10%;
+  background-size: 90%;
+}
+
 .bureau-card.is-visible .bureau-image {
   opacity: 1;
   transform: scale(1.05);

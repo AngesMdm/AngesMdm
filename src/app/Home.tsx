@@ -219,7 +219,7 @@ export default function Home() {
                             <div className="slider-card" key={index} onClick={() => setSelectedSlide(slide)} style={{ flex: `0 0 calc(${100 / slides.length}% - 0.5rem)`, boxSizing: "border-box", cursor: "pointer" }}>
                                 <Image src={slide.images[0].src} alt={`Slide ${index + 1}`} width={300} height={300} />
                                 <div className="slider-card-text">
-                                    <h3>{slide.title}</h3>
+                                    <h3 style={{ color: "var(--background)" }}>{slide.title}</h3>
                                     <p>{slide.description}</p>
                                 </div>
                             </div>
@@ -233,11 +233,11 @@ export default function Home() {
 
             {selectedSlide && (
                 <div className={`popup-overlay ${isClosing ? "fade-out" : ""}`} onClick={handleClosePopup} >
-                    <div className="popup-content" onClick={(e) => e.stopPropagation()} >
+                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }} className="popup-content" onClick={(e) => e.stopPropagation()} >
                         <button className="popup-close" onClick={handleClosePopup}>✕</button>
-                        <h2>{selectedSlide.title}</h2>
-                        <Image src={selectedSlide.images[0].src} alt={selectedSlide.title} width={500} height={300} style={{ borderRadius: "12px", objectFit: "cover" }} />
-                        <p style={{ marginTop: "1rem" }}>{selectedSlide.description}</p>
+                        <h2 style={{ textAlign: "center" }}>{selectedSlide.title}</h2>
+                        <Image src={selectedSlide.images[0].src} alt={selectedSlide.title} width={500} height={300} style={{ borderRadius: "12px", width: "80%", height: "80%" }} />
+                        <p style={{ marginTop: "1rem", color: "var(--main-color)" }}>{selectedSlide.description}</p>
                         {selectedSlide.link && (
                             <a href={selectedSlide.link[0]} target="_blank" rel="noopener noreferrer" className="popup-link">En savoir plus</a>
                         )}
