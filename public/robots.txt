@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://anges-mdm.vercel.app
+
+# Sitemaps
+Sitemap: https://anges-mdm.vercel.app/sitemap.xml
