@@ -70,22 +70,22 @@ export default function FootPage() {
 const attaque = [
     {
         nom: "Quarterback (QB)",
-        image: "/assets/images/foot/qb.jpg",
+        image: "/assets/images/foot/qb.png",
         description: "Le chef d’orchestre de l’attaque, il lance ou court avec la balle."
     },
     {
         nom: "Running Back (RB)",
-        image: "/assets/images/foot/rb.jpg",
+        image: "/assets/images/foot/rb.png",
         description: "Rapide et agile, il court avec la balle pour gagner des yards."
     },
     {
         nom: "Wide Receiver (WR)",
-        image: "/assets/images/foot/wr.jpg",
+        image: "/assets/images/foot/wr.png",
         description: "Il attrape les passes du QB et progresse sur le terrain."
     },
     {
         nom: "Offensive Line (OL)",
-        image: "/assets/images/foot/ol.jpg",
+        image: "/assets/images/foot/ol.png",
         description: "Protège le QB et ouvre des brèches pour les coureurs."
     },
 ];
@@ -93,22 +93,22 @@ const attaque = [
 const defense = [
     {
         nom: "Defensive Line (DL)",
-        image: "/assets/images/foot/dl.jpg",
+        image: "/assets/images/foot/dl.png",
         description: "Gros gabarits chargés de stopper la course ou d’atteindre le QB."
     },
     {
         nom: "Linebacker (LB)",
-        image: "/assets/images/foot/lb.jpg",
+        image: "/assets/images/foot/lb.png",
         description: "Polivalent, il défend la course et couvre les passes."
     },
     {
         nom: "Cornerback (CB)",
-        image: "/assets/images/foot/cb.jpg",
+        image: "/assets/images/foot/cb.png",
         description: "Spécialiste de la couverture des receveurs adverses."
     },
     {
         nom: "Safety",
-        image: "/assets/images/foot/safety.jpg",
+        image: "/assets/images/foot/safety.png",
         description: "Dernière ligne de défense, rapide et lucide."
     },
 ];
@@ -116,17 +116,17 @@ const defense = [
 const teams = [
     {
         nom: "Kicker",
-        image: "/assets/images/foot/kicker.jpg",
+        image: "/assets/images/foot/kicker.png",
         description: "Spécialiste du tir au pied : engagements, transformations et field goals."
     },
     {
         nom: "Punter",
-        image: "/assets/images/foot/punter.jpg",
+        image: "/assets/images/foot/punter.png",
         description: "Dégage loin la balle lors des 4e tentatives."
     },
     {
         nom: "Returner",
-        image: "/assets/images/foot/returner.jpg",
+        image: "/assets/images/foot/returner.png",
         description: "Remonte les ballons bottés par l’adversaire."
     },
 ];

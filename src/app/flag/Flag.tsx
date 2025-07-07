@@ -58,13 +58,13 @@ const positions = [
     {
         type: "attaque",
         nom: "Quarterback (QB)",
-        image: "/assets/images/flag/qb.jpg",
+        image: "/assets/images/flag/qb.png",
         description: "Le cerveau de l’attaque. Il reçoit la balle au snap et décide de lancer, courir ou remettre la balle à un coéquipier."
     },
     {
         type: "attaque",
         nom: "Receiver (WR)",
-        image: "/assets/images/flag/wr.jpg",
+        image: "/assets/images/flag/wr.png",
         description: "Joueur agile et rapide, il court des tracés précis pour se démarquer et recevoir les passes du QB."
     },
     {

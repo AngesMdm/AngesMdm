@@ -43,22 +43,22 @@ export default function CheerPage() {
 const disciplines = [
     {
         nom: "Stunts",
-        image: "/assets/images/cheer/stunt.jpg",
+        image: "/assets/images/cheer/stunt.png",
         description: "Figures acrobatiques en groupe où une base soulève un flyer. Demande force et coordination."
     },
     {
         nom: "Tumbling",
-        image: "/assets/images/cheer/tumbling.jpg",
+        image: "/assets/images/cheer/tumbling.png",
         description: "Enchaînements gymniques comme flips, roues et saltos, montrant agilité et puissance."
     },
     {
         nom: "Jumps",
-        image: "/assets/images/cheer/jump.jpg",
+        image: "/assets/images/cheer/jumps.png",
         description: "Sauts dynamiques réalisés en synchronisation. Vitesse, explosivité et esthétique sont clés."
     },
     {
         nom: "Dance",
-        image: "/assets/images/cheer/dance.jpg",
+        image: "/assets/images/cheer/dance.png",
         description: "Chorégraphies rythmées intégrant mouvements de cheer et transitions dynamiques."
     },
 ];

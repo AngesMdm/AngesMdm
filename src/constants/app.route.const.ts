@@ -43,3 +43,8 @@ export const STAFF_ROUTE = '/staff';
  * Variable qui représente la valeur de la route Bureau.
  */
 export const BUREAU_ROUTE = '/bureau';
+
+/**
+ * Variable qui représente la valeur de la route Nous Rejoindre.
+ */
+export const NOUS_REJOINDRE_ROUTE = '/nous-rejoindre';

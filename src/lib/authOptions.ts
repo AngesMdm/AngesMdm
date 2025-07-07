@@ -34,9 +34,10 @@ export const authOptions: NextAuthOptions = {
       const email = session.user?.email;
       if (!email) return session;
 
-      const result = await Query('SELECT id FROM users WHERE email = $1', [email]);
+      const result = await Query('SELECT id, admin FROM users WHERE email = $1', [email]);
       if ((result.rowCount ?? 0) > 0 && session.user) {
         session.user.id = result.rows[0].id;
+        session.user.admin = result.rows[0].admin;
       }
 
       return session;

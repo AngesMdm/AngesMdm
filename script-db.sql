@@ -34,3 +34,25 @@ CREATE TABLE media_files (
 
   CONSTRAINT fk_folder_id FOREIGN KEY (folder_id) REFERENCES folders(id),
 );
+
+-- Table des questions FAQ posées par les utilisateurs
+CREATE TABLE faq_questions (
+  id SERIAL PRIMARY KEY,
+  question TEXT NOT NULL,                   -- Contenu de la question
+  created_by INTEGER NOT NULL,              -- Utilisateur qui pose la question
+  created_at TIMESTAMP DEFAULT NOW(),       -- Date de création de la question
+
+  CONSTRAINT fk_question_user FOREIGN KEY (created_by) REFERENCES users(id)
+);
+
+-- Table des réponses FAQ rédigées par un admin
+CREATE TABLE faq_answers (
+  id SERIAL PRIMARY KEY,
+  question_id INTEGER UNIQUE NOT NULL,      -- Lien avec la question (une seule réponse par question)
+  answer TEXT NOT NULL,                     -- Contenu de la réponse
+  answered_by INTEGER NOT NULL,             -- Admin qui répond
+  answered_at TIMESTAMP DEFAULT NOW(),      -- Date de réponse
+
+  CONSTRAINT fk_answer_question FOREIGN KEY (question_id) REFERENCES faq_questions(id) ON DELETE CASCADE,
+  CONSTRAINT fk_answer_user FOREIGN KEY (answered_by) REFERENCES users(id)
+);

@@ -1,7 +1,7 @@
 "use client";
 import { memo, useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { HOME_ROUTE, FLAG_ROUTE, FOOT_ROUTE, CHEER_ROUTE, LOGIN_ROUTE, DRIVE_ROUTE, STAFF_ROUTE, BUREAU_ROUTE } from "@/constants/app.route.const";
+import { HOME_ROUTE, FLAG_ROUTE, FOOT_ROUTE, CHEER_ROUTE, LOGIN_ROUTE, DRIVE_ROUTE, STAFF_ROUTE, BUREAU_ROUTE, NOUS_REJOINDRE_ROUTE } from "@/constants/app.route.const";
 import { useSession, signOut } from "next-auth/react";
 
 export const Header = memo(() => {
@@ -98,6 +98,7 @@ export const Header = memo(() => {
 
                 {!isMobile && (
                     <nav className="header-nav">
+                        <a href={NOUS_REJOINDRE_ROUTE} className="nav-list" style={{ textDecoration: "none", color: "var(--main-color)" }}>Nous rejoindre</a>
                         <ul className="nav-list">
                             {session?.user ? (
                                 <li className="nav-item user-menu" ref={menuRef}>
