@@ -1,155 +1,399 @@
 "use client";
 
-import { Folder, File, FAQ } from "@/types/type";
+import { Folder, MediaFile } from "@/types/type";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { TrashIcon, EditIcon } from "@/components/svg/edit.svg";
-
-type FAQWithState = FAQ & { open: boolean };
+import { useEffect, useRef, useState } from "react";
+import FaqSection from "@/components/FaqSection";
 
 const exampleData: Folder = {
     id: "root",
     name: "Racine",
     type: "folder",
+    mediaCount: 0,
     children: [
         {
             id: "folder1",
             name: "Photos et Vidéos",
             type: "folder",
+            mediaCount: 2,
             children: [
                 {
                     id: "folder1-1",
                     name: "Vidéos",
                     type: "folder",
-                    children: [
-                        { id: "vid2", name: "oui.mp4", type: "file", fileType: "video", url: "/assets/images/oui.MP4" }
-                    ]
+                    mediaCount: 1,
+                    children: [{ id: "vid2", name: "oui.mp4", type: "file", fileType: "video", url: "/assets/images/oui.MP4" }],
                 },
                 { id: "img1", name: "le logo la.jpg", type: "file", fileType: "image", url: "/assets/images/logo.png" },
-                { id: "vid1", name: "Meilleur QB de France.mp4", type: "file", fileType: "video", url: "/assets/images/rickroll.mp4" }
-            ]
+                { id: "vid1", name: "Meilleur QB de France.mp4", type: "file", fileType: "video", url: "/assets/images/rickroll.mp4" },
+            ],
         },
         {
             id: "folder2",
             name: "Images",
             type: "folder",
-            children: [
-                { id: "img2", name: "logo.jpg", type: "file", fileType: "image", url: "/assets/images/logo.png" }
-            ]
-        }
-    ]
+            mediaCount: 1,
+            children: [{ id: "img2", name: "logo.jpg", type: "file", fileType: "image", url: "/assets/images/logo.png" }],
+        },
+    ],
 };
 
 export default function Drive() {
     const { data: session, status } = useSession();
     const router = useRouter();
+    const [rootFolder, setRootFolder] = useState<Folder>(exampleData);
     const [pathStack, setPathStack] = useState<Folder[]>([exampleData]);
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [faqList, setFaqList] = useState<FAQWithState[]>([]);
-    const [newQuestion, setNewQuestion] = useState("");
-    const [editingIndex, setEditingIndex] = useState<number | null>(null);
-    const [editContent, setEditContent] = useState({ question: "", answer: "" });
+    const [selectedFile, setSelectedFile] = useState<MediaFile | null>(null);
+    let currentFolder = pathStack[pathStack.length - 1];
+    const [folderListForMove, setFolderListForMove] = useState<{ id: string; name: string }[]>([]);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    // Modal déplacement
+    const [moveModalOpen, setMoveModalOpen] = useState(false);
+    const [moveItemId, setMoveItemId] = useState<string | null>(null);
 
     const isAdmin = session?.user?.admin === true;
 
-    const currentFolder = pathStack[pathStack.length - 1];
+    /**
+     * Ouvre un dossier et met à jour le chemin actuel
+     * @param folder Dossier à ouvrir
+     */
     function openFolder(folder: Folder) {
         setPathStack((prev) => [...prev, folder]);
         setSelectedFile(null);
     }
+
+    /**
+     * Retourne au dossier précédent
+     */
     function goBack() {
         if (pathStack.length > 1) {
             setPathStack((prev) => prev.slice(0, prev.length - 1));
             setSelectedFile(null);
         }
     }
+
+    /**
+     * Ferme la popup de visualisation de fichier
+     */
     function closePopup() {
         setSelectedFile(null);
     }
-    function toggleFaq(index: number) {
-        setFaqList((prev = []) =>
-            prev.map((faq, i) => (i === index ? { ...faq, open: !faq.open } : faq))
-        );
-    }
-
-    const fetchFaqList = async () => {
-        try {
-            const response = await fetch("/api/drive/faq/all");
-            if (!response.ok) throw new Error("Erreur lors de la récupération des FAQ");
-            const data = (await response.json()) as FAQ[];
-            setFaqList(data.map((faq) => ({ ...faq, open: false })));
-        } catch (error) {
-            console.error("Erreur lors de la récupération des FAQ :", error);
-        }
-    };
 
     useEffect(() => {
         if (status === "unauthenticated") router.push("/");
     }, [status, router]);
 
-    function handleAddQuestion() {
-        if (newQuestion.trim() !== "") {
-            fetch("/api/drive/faq/question", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ question: newQuestion, userId: session?.user?.id }),
-            })
-                .then(() => fetchFaqList())
-                .catch((err) => console.error(err));
+    /**
+     * Met à jour la structure des dossiers
+     * @param root Dossier racine
+     * @param targetId ID du dossier cible
+     * @param updater Fonction de mise à jour
+     * @returns Dossier mis à jour
+     */
+    function updateFolderStructure(root: Folder, targetId: string, updater: (folder: Folder) => void): Folder {
+        if (root.id === targetId) {
+            updater(root);
+            return { ...root };
+        }
+        if (!root.children) return root;
+        return {
+            ...root,
+            children: root.children.map((child) =>
+                child.type === "folder" ? updateFolderStructure(child, targetId, updater) : child
+            ),
+        };
+    }
 
-            setNewQuestion("");
+    /**
+     * Trouve un dossier par son ID dans la structure
+     * @param folder Dossier à parcourir
+     * @param id ID du dossier recherché
+     * @returns Dossier trouvé ou null
+     */
+    function findFolderById(folder: Folder, id: string): Folder | null {
+        if (folder.id === id) return folder;
+        for (const child of folder.children) {
+            if (child.type === "folder") {
+                const found = findFolderById(child, id);
+                if (found) return found;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Crée un nouveau dossier
+     * @returns Liste des dossiers à déplacer
+     */
+    async function handleCreateFolder() {
+        const folderName = prompt("Nom du dossier :");
+        if (!folderName) return;
+
+        // Appel API
+        const res = await fetch("/api/drive/media/folder", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name: folderName,
+                parentId: currentFolder.id,
+            }),
+        });
+
+        if (!res.ok) {
+            alert("Erreur lors de la création du dossier");
+            return;
+        }
+
+        const newFolder = await res.json();
+
+        const updatedRoot = updateFolderStructure(rootFolder, currentFolder.id, (folder) => {
+            folder.children.push({
+                id: newFolder.id,
+                name: newFolder.name,
+                type: "folder",
+                mediaCount: 0,
+                children: [],
+            });
+        });
+
+        setRootFolder(updatedRoot);
+        setPathStack((prev) => {
+            const updatedCurrent = findFolderById(updatedRoot, currentFolder.id)!;
+            return [...prev.slice(0, -1), updatedCurrent];
+        });
+        setFolderListForMove(flattenFolders(updatedRoot));
+    }
+
+
+    /**
+     * Gère l'ajout de fichiers via l'input
+     * @param event Événement de changement de l'input
+     */
+    async function handleFileInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+        const files = event.target.files;
+        if (!files || files.length === 0) return;
+
+        setIsUploading(true);
+
+        try {
+            const formData = new FormData();
+            formData.append("folderId", currentFolder.id.replace("folder-", ""));
+
+            for (const file of files) {
+                formData.append("files", file);
+            }
+
+            const response = await fetch("/api/drive/media/file", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error("Erreur lors de l'envoi des fichiers.");
+            }
+
+            const insertedFiles = await response.json();
+
+            const updatedRoot = updateFolderStructure(rootFolder, currentFolder.id, (folder) => {
+                folder.children.push(...insertedFiles);
+            });
+
+            setRootFolder(updatedRoot);
+
+            setPathStack((prev) => {
+                const updatedCurrent = findFolderById(updatedRoot, currentFolder.id)!;
+                return [...prev.slice(0, -1), updatedCurrent];
+            });
+            setFolderListForMove(flattenFolders(updatedRoot));
+        } catch (error) {
+            console.error("Erreur lors de l'envoi des fichiers :", error);
+            alert("Erreur lors de l'envoi des fichiers.");
+        } finally {
+            setIsUploading(false);
+            event.target.value = "";
         }
     }
 
-    function handleEdit(index: number) {
-        const current = faqList[index];
-        setEditingIndex(index);
-        setEditContent({ question: current.question, answer: current.answer ?? "" });
+
+    // Supprime un fichier ou dossier par son id, récursivement pour dossiers
+    async function handleDeleteItem(
+        itemId: string,
+        itemName: string,
+        itemType: "folder" | "file" = "folder"
+    ) {
+        if (!confirm(`Voulez-vous vraiment supprimer "${itemName}" ?`)) return;
+        setIsDeleting(true);
+        try {
+            const res = await fetch("/api/drive/media/delete", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ itemId, itemType }),
+            });
+
+            if (!res.ok) {
+                throw new Error(`Erreur lors de la suppression : ${res.statusText}`);
+            }
+
+            // Mise à jour de l'état côté client (suppression dans l'arborescence)
+            function deleteRecursively(folder: Folder): Folder {
+                return {
+                    ...folder,
+                    children: folder.children
+                        .filter((child) => child.id !== itemId)
+                        .map((child) =>
+                            child.type === "folder" ? deleteRecursively(child) : child
+                        ),
+                };
+            }
+
+            const updatedRoot = deleteRecursively(rootFolder);
+            setRootFolder(updatedRoot);
+
+            setPathStack((prev) => {
+                const updatedCurrent = findFolderById(updatedRoot, currentFolder.id);
+                if (!updatedCurrent) {
+                    return [updatedRoot];
+                }
+                return [...prev.slice(0, -1), updatedCurrent];
+            });
+            setFolderListForMove(flattenFolders(updatedRoot));
+
+            if (selectedFile?.id === itemId) {
+                setSelectedFile(null);
+            }
+        } catch (error) {
+            console.error("Erreur lors de la suppression de l'élément :", error);
+            alert("Impossible de supprimer l'élément.");
+        } finally {
+            setIsDeleting(false);
+        }
     }
 
-    function handleEditSubmit(id: number) {
-        fetch("/api/drive/faq/answer", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ questionId: id, ...editContent, userId: session?.user?.id }),
-        })
-            .then(() => {
-                setEditingIndex(null);
-                fetchFaqList();
-            })
-            .catch(console.error);
+    // Ouvre la modale déplacement avec l'id de l'item
+    function openMoveModal(itemId: string) {
+        setMoveItemId(itemId);
+        setMoveModalOpen(true);
     }
 
-    function handleDeleteAnswer(id: number) {
-        if (!confirm("Supprimer cette réponse ?")) return;
-        fetch("/api/drive/faq/answer", {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ answerId: id }),
-        })
-            .then(() => fetchFaqList())
-            .catch(console.error);
+    // Fonction pour déplacer un item vers un dossier cible
+    async function moveItemToFolder(itemId: string, targetFolderId: string) { //TODO 
+        if (!itemId) return;
+
+        let itemToMove: MediaFile | Folder | null = null;
+
+        // Supprime l'item de son dossier actuel pour l'extraire
+        function removeItem(folder: Folder): Folder {
+            return {
+                ...folder,
+                children: folder.children
+                    .filter((child): child is MediaFile | Folder => {
+                        if (child.id === itemId) {
+                            itemToMove = child as MediaFile | Folder;
+                            return false;
+                        }
+                        return true;
+                    })
+                    .map((child) => (child.type === "folder" ? removeItem(child as Folder) : child)),
+            };
+        }
+
+        const rootWithoutItem = removeItem(rootFolder);
+
+        if (!itemToMove) {
+            alert("Élément introuvable pour déplacement.");
+            return;
+        }
+
+        // Vérifie que la cible n'est pas un descendant de l'item à déplacer (évite boucle)
+        if ((itemToMove as Folder).type === "folder") {
+            const isDescendant = (folder: Folder): boolean => {
+                if (folder.id === targetFolderId) return true;
+                if (!folder.children) return false;
+                return folder.children.some(
+                    (child) => child.type === "folder" && isDescendant(child)
+                );
+            };
+            if (isDescendant(itemToMove)) {
+                alert(
+                    "Impossible de déplacer un dossier dans lui-même ou dans un de ses sous-dossiers."
+                );
+                return;
+            }
+        }
+
+        try {
+            // Envoie la requête au backend
+            const res = await fetch("/api/drive/media/move", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    itemType: (itemToMove as Folder).type,
+                    itemId: (itemToMove as Folder).id.replace(/^folder-|file-/, ""), // enlever préfixe
+                    targetFolderId: targetFolderId === "root" ? null : parseInt(targetFolderId.replace(/^folder-/, ""), 10),
+                }),
+            });
+
+            if (!res.ok) {
+                throw new Error(`Erreur lors du déplacement : ${res.statusText}`);
+            }
+
+            // Ajoute l’item dans le dossier cible côté client
+            const newRoot = updateFolderStructure(rootWithoutItem, targetFolderId, (folder) => {
+                folder.children.push(itemToMove!);
+            });
+
+            setRootFolder(newRoot);
+            setPathStack([newRoot]); // Retour à la racine après déplacement
+            setSelectedFile(null);
+            setMoveModalOpen(false);
+            setMoveItemId(null);
+            setFolderListForMove(flattenFolders(newRoot));
+        } catch (error) {
+            console.error("Erreur lors du déplacement :", error);
+            alert("Impossible de déplacer l'élément.");
+        }
     }
 
-    function handleDeleteQuestion(id: number) {
-        if (!confirm("Supprimer cette question ?")) return;
-        fetch("/api/drive/faq/question", {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ questionId: id }),
-        })
-            .then((res) => {
-                if (!res.ok) throw new Error("Erreur lors de la suppression");
-                return res.json();
-            })
-            .then(() => fetchFaqList())
-            .catch(console.error);
+
+    // Récupérer la liste plate des dossiers pour la sélection de déplacement
+    function flattenFolders(folder: Folder, prefix = ""): { id: string; name: string }[] {
+        const currentName = prefix ? prefix + " / " + folder.name : folder.name;
+        let list = [{ id: folder.id, name: currentName }];
+        if (folder.children) {
+            folder.children.forEach((child) => {
+                if (child.type === "folder") {
+                    list = list.concat(flattenFolders(child, currentName));
+                }
+            });
+        }
+        return list;
     }
 
-    useEffect(() => {
-        fetchFaqList();
-    }, []);
+    /**
+     * Met à jour la liste des dossiers pour le déplacement
+     */
+    const fetchDriveList = async () => {
+        try {
+            const response = await fetch("/api/drive/media/all");
+            if (!response.ok) throw new Error("Erreur lors de la récupération des FAQ");
+            const data = (await response.json())[0] as Folder;
+            console.log("Données récupérées :", data);
+            setRootFolder(data);
+            setPathStack([data])
+            currentFolder = [data][[data].length - 1]
+            setFolderListForMove(flattenFolders(data));
+        } catch (error) {
+            console.error("Erreur lors de la récupération des FAQ :", error);
+        }
+    };
+
+    useEffect(() => { fetchDriveList(); }, []);
 
     if (status === "loading") return <p>Chargement...</p>;
     if (!session) return null;
@@ -157,165 +401,75 @@ export default function Drive() {
     return (
         <main style={{ padding: "1rem", marginTop: "5rem", minHeight: "700px", backgroundColor: "var(--background)", color: "var(--main-color)" }}>
             <h1>Mon Drive</h1>
-
             <div style={{ marginBottom: "1rem", display: "flex", alignItems: "center", gap: "1rem" }}>
-                <button onClick={goBack} disabled={pathStack.length === 1} style={{ padding: "0.5rem 1rem", backgroundColor: pathStack.length === 1 ? "#ccc" : "var(--orange-color)", color: "white", border: "none", borderRadius: "6px", cursor: pathStack.length === 1 ? "not-allowed" : "pointer" }}>← Retour</button>
+                <button onClick={goBack} disabled={pathStack.length === 1} style={{ padding: "0.5rem 1rem", backgroundColor: pathStack.length === 1 ? "#ccc" : "var(--orange-color)", color: "white", border: "none", borderRadius: "6px", cursor: pathStack.length === 1 ? "not-allowed" : "pointer" }}>
+                    ← Retour
+                </button>
                 <span>Chemin : {pathStack.map((f) => f.name).join(" / ")}</span>
             </div>
+
+            {isAdmin && (
+                <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
+                    <button onClick={handleCreateFolder} style={{ padding: "0.5rem 1rem", backgroundColor: "var(--orange-color)", color: "white", borderRadius: "6px", cursor: "pointer" }}>
+                        Créer un dossier
+                    </button>
+                    <button onClick={() => fileInputRef.current?.click()} style={{ padding: "0.5rem 1rem", backgroundColor: "var(--orange-color)", color: "white", borderRadius: "6px", cursor: "pointer" }}>
+                        Ajouter des fichiers
+                    </button>
+                    <input ref={fileInputRef} type="file" multiple accept="image/*,video/*" onChange={handleFileInputChange} style={{ display: "none" }} />
+                </div>
+
+            )}
+            {isUploading && (
+                <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10000 }}>
+                    <div style={{ backgroundColor: "white", borderRadius: "12px", padding: "1rem", textAlign: "center" }}>
+                        <p>import en cours...</p>
+                    </div>
+                </div>
+            )}
 
             <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap", justifyContent: "flex-start" }}>
                 {currentFolder.children.length === 0 && <p>Ce dossier est vide.</p>}
                 {currentFolder.children.map((item) =>
                     item.type === "folder" ? (
-                        <div key={item.id} style={{ cursor: "pointer", border: "1px solid #aaa", borderRadius: "8px", padding: "1rem", width: "150px", textAlign: "center", backgroundColor: "var(--card-bg)", color: "white" }} onClick={() => openFolder(item)}>
+                        <div onClick={() => openFolder(item)} key={item.id} style={{ position: "relative", border: "1px solid #aaa", borderRadius: "8px", padding: "1rem", width: "150px", textAlign: "center", backgroundColor: "var(--card-bg)", color: "white", cursor: "pointer", userSelect: "none" }}>
                             <div style={{ fontSize: "3rem" }}>📁</div>
                             <div>{item.name}</div>
+                            {isAdmin && (
+                                <div style={{ position: "absolute", top: "5px", right: "5px", display: "flex", gap: "0.3rem" }}>
+                                    <button onClick={(e) => { e.stopPropagation(); openMoveModal(item.id); }} style={{ cursor: "pointer", backgroundColor: "#555", color: "white", border: "none", borderRadius: "4px", padding: "0 6px" }} title="Déplacer">↪</button>
+                                    <button onClick={(e) => { e.stopPropagation(); handleDeleteItem(item.id, item.name, item.type); }} style={{ cursor: "pointer", backgroundColor: "#c00", color: "white", border: "none", borderRadius: "4px", padding: "0 6px" }} title="Supprimer">✕</button>
+                                </div>
+                            )}
                         </div>
                     ) : (
-                        <div key={item.id} style={{ cursor: "pointer", border: selectedFile?.id === item.id ? "2px solid var(--orange-color)" : "1px solid #ccc", borderRadius: "8px", padding: "0.5rem", width: "150px", textAlign: "center", backgroundColor: "var(--card-bg)", color: "white" }} onClick={() => setSelectedFile(item)}>
-                            {item.fileType === "image" ? <img src={item.url} alt={item.name} style={{ width: "100%", borderRadius: "6px" }} /> : <video src={item.url} style={{ width: "100%", borderRadius: "6px" }} muted preload="metadata" />}
-                            <div style={{ marginTop: "0.3rem" }}>{item.name}</div>
+                        <div key={item.id} style={{ position: "relative", border: selectedFile?.id === item.id ? "2px solid var(--orange-color)" : "1px solid #ccc", borderRadius: "8px", padding: "0.5rem", width: "150px", textAlign: "center", backgroundColor: "var(--card-bg)", color: "white", cursor: "pointer", userSelect: "none" }}>
+                            <div onClick={() => setSelectedFile(item)} style={{ cursor: "pointer" }}>
+                                {item.fileType === "image" ? (
+                                    <img src={item.url} alt={item.name} style={{ width: "100%", borderRadius: "6px" }} />
+                                ) : (
+                                    <video src={item.url} style={{ width: "100%", borderRadius: "6px" }} muted preload="metadata" />
+                                )}
+                                <div style={{ marginTop: "0.3rem" }}>{item.name}</div>
+                            </div>
+                            {isAdmin && (
+                                <div style={{ position: "absolute", top: "5px", right: "5px", display: "flex", gap: "0.3rem" }}>
+                                    <button onClick={(e) => { e.stopPropagation(); openMoveModal(item.id); }} style={{ cursor: "pointer", backgroundColor: "#555", color: "white", border: "none", borderRadius: "4px", padding: "0 6px" }} title="Déplacer">↪</button>
+                                    <button onClick={(e) => { e.stopPropagation(); handleDeleteItem(item.id, item.name, item.type); }} style={{ cursor: "pointer", backgroundColor: "#c00", color: "white", border: "none", borderRadius: "4px", padding: "0 6px" }} title="Supprimer">✕</button>
+                                </div>
+                            )}
                         </div>
                     )
                 )}
             </div>
 
-            <section style={{ marginTop: "3rem" }}>
-                <h2>FAQ</h2>
-
-                <div style={{ marginBottom: "1rem", display: "flex", gap: "0.5rem" }}>
-                    <input
-                        type="text"
-                        placeholder="Posez votre question..."
-                        value={newQuestion}
-                        onChange={(e) => setNewQuestion(e.target.value)}
-                        style={{ flex: 1, padding: "0.5rem", borderRadius: "6px", border: "1px solid #666", backgroundColor: "var(--background-soft)", color: "white" }}
-                    />
-                    <button
-                        onClick={handleAddQuestion}
-                        style={{ padding: "0.75rem 1.5rem", fontSize: "1rem", backgroundColor: "var(--orange-color)", color: "white", border: "none", borderRadius: "6px", cursor: "pointer", transition: "background-color 0.3s ease" }}
-                        onMouseEnter={e => e.currentTarget.style.backgroundColor = "var(--orange-color-hover)"}
-                        onMouseLeave={e => e.currentTarget.style.backgroundColor = "var(--orange-color)"}
-                    >
-                        Envoyer
-                    </button>
+            {isDeleting && (
+                <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10000 }}>
+                    <div style={{ backgroundColor: "white", borderRadius: "12px", padding: "1rem", textAlign: "center" }}>
+                        <p>Suppression en cours...</p>
+                    </div>
                 </div>
-
-                <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                    {(faqList ?? []).map((faq, index) => (
-                        <div
-                            key={index}
-                            onClick={() => toggleFaq(index)}
-                            style={{ backgroundColor: faq.answer ? "var(--card-bg)" : "#3b2f2f", borderLeft: `6px solid ${faq.answer ? "var(--orange-color)" : "#999"}`, borderRadius: "8px", padding: "1rem", cursor: "pointer", position: "relative" }}
-                        >
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <span style={{ color: "var(--orange-color)", fontWeight: "bold" }}>❓: {faq.question}</span>
-                                <span style={{ transform: faq.open ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 0.2s" }}>▶</span>
-                            </div>
-
-                            <button
-                                onClick={e => {
-                                    e.stopPropagation();
-                                    handleDeleteQuestion(faq.id);
-                                }}
-                                style={{ position: "absolute", top: "10px", right: "40px", backgroundColor: "#e74c3c", border: "none", borderRadius: "4px", padding: "0.4rem 0.7rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "background-color 0.3s ease" }}
-                                title="Supprimer la question"
-                                onMouseEnter={e => e.currentTarget.style.backgroundColor = "#c0392b"}
-                                onMouseLeave={e => e.currentTarget.style.backgroundColor = "#e74c3c"}
-                            >
-                                <TrashIcon width={16} height={16} />
-                            </button>
-
-                            {faq.open && (
-                                <div style={{ marginTop: "0.7rem", padding: "0.75rem 1rem", backgroundColor: "var(--background-soft)", borderLeft: "4px solid var(--orange-color)", borderRadius: "4px", color: "var(--main-color)" }}>
-                                    {editingIndex === index ? (
-                                        <>
-                                            <input
-                                                value={editContent.question}
-                                                onChange={(e) => setEditContent({ ...editContent, question: e.target.value })}
-                                                placeholder="Modifier la question"
-                                                style={{ width: "100%", marginBottom: "0.5rem", padding: "0.5rem", borderRadius: "4px", border: "1px solid #666" }}
-                                                onClick={(e) => e.stopPropagation()}
-                                            />
-                                            <textarea
-                                                value={editContent.answer}
-                                                onChange={(e) => setEditContent({ ...editContent, answer: e.target.value })}
-                                                placeholder="Modifier ou ajouter une réponse"
-                                                style={{ width: "100%", marginBottom: "0.5rem", padding: "0.5rem", borderRadius: "4px", border: "1px solid #666" }}
-                                                onClick={(e) => e.stopPropagation()}
-                                            />
-                                            <div style={{ display: "flex", gap: "0.5rem" }}>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleEditSubmit(faq.id);
-                                                    }}
-                                                    style={{ backgroundColor: "#4CAF50", color: "white", border: "none", borderRadius: "4px", padding: "0.6rem 1rem", cursor: "pointer", fontSize: "1rem", transition: "background-color 0.3s ease" }}
-                                                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#45a049")}
-                                                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#4CAF50")}
-                                                >
-                                                    Enregistrer
-                                                </button>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setEditingIndex(null);
-                                                    }}
-                                                    style={{ backgroundColor: "#999", color: "white", border: "none", borderRadius: "4px", padding: "0.6rem 1rem", cursor: "pointer", fontSize: "1rem", transition: "background-color 0.3s ease" }}
-                                                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#666")}
-                                                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#999")}
-                                                >
-                                                    Annuler
-                                                </button>
-                                            </div>
-                                        </>
-                                    ) : faq.answer ? (
-                                        <>
-                                            <strong style={{ color: "#90ee90" }}>R :</strong> {faq.answer}
-                                        </>
-                                    ) : (
-                                        <>
-                                            <strong style={{ color: "#ffcc00" }}>En attente :</strong> Cette question n’a pas encore reçu de réponse.
-                                            {isAdmin && (
-                                                <div style={{ marginTop: "0.5rem" }}>
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            handleEdit(index);
-                                                        }}
-                                                        style={{ display: "flex", alignItems: "center", gap: "0.3rem", backgroundColor: "#4CAF50", color: "white", border: "none", padding: "0.5rem 1rem", borderRadius: "6px", cursor: "pointer", fontSize: "1rem", transition: "background-color 0.3s ease" }}
-                                                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#45a049")}
-                                                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#4CAF50")}
-                                                    >
-                                                        Répondre
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </>
-                                    )}
-
-
-                                    {isAdmin && editingIndex !== index && (
-                                        <div style={{ marginTop: "0.5rem", display: "flex", gap: "0.5rem" }}>
-                                            {faq.answer && (
-                                                <>
-                                                    <button onClick={(e) => { e.stopPropagation(); handleEdit(index); }} style={{ display: "flex", alignItems: "center", gap: "0.3rem", backgroundColor: "#3498db", color: "white", border: "none", padding: "0.5rem 1rem", borderRadius: "6px", cursor: "pointer", fontSize: "1rem", transition: "background-color 0.3s ease" }} title="Éditer" onMouseEnter={e => e.currentTarget.style.backgroundColor = "#2980b9"} onMouseLeave={e => e.currentTarget.style.backgroundColor = "#3498db"}>
-                                                        <EditIcon width={16} height={16} />
-                                                    </button>
-                                                    <button onClick={(e) => { e.stopPropagation(); handleDeleteAnswer(faq.answerid || 0); }} style={{ display: "flex", alignItems: "center", gap: "0.3rem", backgroundColor: "#e74c3c", color: "white", border: "none", padding: "0.5rem 1rem", borderRadius: "6px", cursor: "pointer", fontSize: "1rem", transition: "background-color 0.3s ease" }} title="Supprimer" onMouseEnter={e => e.currentTarget.style.backgroundColor = "#c0392b"} onMouseLeave={e => e.currentTarget.style.backgroundColor = "#e74c3c"}>
-                                                        <TrashIcon width={16} height={16} />
-                                                    </button>
-                                                </>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            </section>
-
+            )}
 
             {selectedFile && (
                 <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }} onClick={closePopup}>
@@ -327,6 +481,31 @@ export default function Drive() {
                     </div>
                 </div>
             )}
+
+            {isAdmin && moveModalOpen && (
+                <div onClick={() => setMoveModalOpen(false)} style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 10000 }}>
+                    <div onClick={(e) => e.stopPropagation()} style={{ backgroundColor: "var(--card-bg)", borderRadius: "8px", padding: "1rem", width: "300px", maxHeight: "80vh", overflowY: "auto" }}>
+                        <h3>Choisir un dossier de destination</h3>
+                        <ul style={{ listStyle: "none", padding: 0, maxHeight: "60vh", overflowY: "auto" }}>
+                            {folderListForMove.map((folder) => (
+                                <li key={folder.id} style={{ marginBottom: "0.5rem" }}>
+                                    <button
+                                        onClick={() => moveItemToFolder(moveItemId!, folder.id)}
+                                        style={{ width: "100%", padding: "0.3rem 0.6rem", borderRadius: "4px", border: "1px solid var(--orange-color)", backgroundColor: folder.id === currentFolder.id ? "var(--orange-color)" : "transparent", color: folder.id === currentFolder.id ? "white" : "var(--orange-color)", cursor: "pointer", textAlign: "left", }}>
+                                        {folder.name}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                        <button onClick={() => setMoveModalOpen(false)} style={{ marginTop: "0.5rem", padding: "0.4rem 0.8rem", backgroundColor: "var(--orange-color)", border: "none", borderRadius: "6px", cursor: "pointer", color: "white", width: "100%" }}>
+                            Annuler
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            <FaqSection session={session} isAdmin={isAdmin} />
         </main>
     );
+
 }

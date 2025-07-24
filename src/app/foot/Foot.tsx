@@ -10,7 +10,7 @@ export default function FootPage() {
             <section className="foot-hero">
                 <div className="foot-hero-content">
                     <h1>Football Américain</h1>
-                    <p>
+                    <p style={{ color: "var(--main-color)" }}>
                         Sport de contact spectaculaire, le football américain repose sur la puissance,
                         la stratégie et la cohésion. Chaque joueur a un rôle unique et essentiel dans
                         un système millimétré.

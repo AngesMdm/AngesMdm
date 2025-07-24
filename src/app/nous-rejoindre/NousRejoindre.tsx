@@ -9,7 +9,7 @@ export default function NousRejoindrePage() {
     const closeLightbox = () => setLightboxImage(null);
 
     return (
-        <div className="nous-rejoindre-wrapper" style={{ marginTop: "8rem" }}>
+        <div className="nous-rejoindre-wrapper" style={{ marginTop: "8rem", borderRadius: "1rem" }}>
             <section className="nous-rejoindre-hero">
                 <div className="nous-rejoindre-hero-content">
                     <h1 style={{ textAlign: "center" }}>

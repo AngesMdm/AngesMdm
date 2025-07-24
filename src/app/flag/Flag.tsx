@@ -9,7 +9,7 @@ export default function FlagPage() {
             <section className="flag-hero">
                 <div className="flag-hero-content">
                     <h1>Le Flag Football</h1>
-                    <p>
+                    <p style={{ color: "var(--main-color)" }}>
                         Le Flag est une variante sans contact du football américain. Accessible, ludique, rapide,
                         il se joue en équipe de 5 à 7 joueurs. Ici, pas de plaquages : pour arrêter un adversaire,
                         il suffit de lui arracher une bande de tissu attachée à la ceinture. C’est un sport mêlant

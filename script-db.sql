@@ -17,10 +17,9 @@ CREATE TABLE users (
 CREATE TABLE folders (
   id SERIAL PRIMARY KEY,
   name VARCHAR NOT NULL,              -- Nom du dossier (ex: "cours", "exercices", etc.)
-  created_by INTEGER,                 -- Optionnel : ID de l'utilisateur qui a créé le dossier
   created_at TIMESTAMP DEFAULT NOW(),
   parent_id INTEGER,
-  CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES users(id)
+  media_count INTEGER DEFAULT 0      -- Compteur de fichiers dans le dossier
 );
 
 -- Table des fichiers média (vidéos ou images)
@@ -56,3 +55,22 @@ CREATE TABLE faq_answers (
   CONSTRAINT fk_answer_question FOREIGN KEY (question_id) REFERENCES faq_questions(id) ON DELETE CASCADE,
   CONSTRAINT fk_answer_user FOREIGN KEY (answered_by) REFERENCES users(id)
 );
+
+-- Fonction déclenchée à chaque insert/delete sur media_files
+CREATE OR REPLACE FUNCTION update_folder_media_count()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    UPDATE folders SET media_count = media_count + 1 WHERE id = NEW.folder_id;
+  ELSIF TG_OP = 'DELETE' THEN
+    UPDATE folders SET media_count = media_count - 1 WHERE id = OLD.folder_id;
+  END IF;
+  RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Le trigger en lui-même
+CREATE TRIGGER trg_update_media_count
+AFTER INSERT OR DELETE ON media_files
+FOR EACH ROW
+EXECUTE FUNCTION update_folder_media_count();

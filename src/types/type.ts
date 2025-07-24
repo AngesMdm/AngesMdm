@@ -1,4 +1,4 @@
-export type File = {
+export type MediaFile = {
     id: string;
     name: string;
     type: "file";
@@ -10,7 +10,8 @@ export type Folder = {
     id: string;
     name: string;
     type: "folder";
-    children: Array<File | Folder>;
+    children: Array<MediaFile | Folder>;
+    mediaCount: number;
 };
 
 export type FAQ = {

@@ -128,6 +128,7 @@ export const Header = memo(() => {
                     <a href={CHEER_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Cheer</a>
                     <a href={STAFF_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Staff</a>
                     <a href={BUREAU_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Bureau</a>
+                    <a href={NOUS_REJOINDRE_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Nous rejoindre</a>
                     {session?.user ? (
                         <>
                             <a href={DRIVE_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Drive</a>

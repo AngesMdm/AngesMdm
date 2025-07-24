@@ -1,4 +1,4 @@
-import { Folder, File, FAQ } from "@/types/type";
+import { FAQ } from "@/types/type";
 import Query from "../db";
 
 /**
