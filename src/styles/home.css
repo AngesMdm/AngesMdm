@@ -49,7 +49,7 @@
 
 .card {
   width: 400px;
-  height: 600px;
+  height: 700px;
   background-size: 110%;
   background-position: center;
   transition: transform 0.3s ease;
@@ -69,15 +69,15 @@
 }
 
 .card.gauche {
-  background: url('../../public/assets/images/foot.png') no-repeat;
+  background: url('../../public/assets/images/foot.png') no-repeat center;
 }
 
 .card.face {
-  background: url('../../public/assets/images/cheer.png') no-repeat;
+  background: url('../../public/assets/images/cheer.png') no-repeat center -10%;
 }
 
 .card.droite {
-  background: url('../../public/assets/images/flag.png') no-repeat ;
+  background: url('../../public/assets/images/flag.png') no-repeat center ;
 }
 
 

@@ -21,7 +21,7 @@ export default function Home() {
     useEffect(() => {
         const updateVisibleSlides = () => {
             const width = window.innerWidth;
-            setVisibleSlides(width < 800 ? 1 : 2);
+            setVisibleSlides(width < 800 ? 1 : 3);
         };
 
         updateVisibleSlides();
@@ -29,6 +29,15 @@ export default function Home() {
 
         return () => window.removeEventListener("resize", updateVisibleSlides);
     }, []);
+
+    const slide = (direction: number) => {
+        setCurrentSlide((prev) => {
+            let next = prev + direction;
+            if (next < 0) next = slides.length - 1;
+            else if (next + (visibleSlides - 1) >= slides.length) next = 0;
+            return next;
+        });
+    };
 
     useEffect(() => {
         let docTitle = document.title;
@@ -69,15 +78,6 @@ export default function Home() {
         };
         fetchData();
     }, []);
-
-    const slide = (direction: number) => {
-        setCurrentSlide((prev) => {
-            let next = prev + direction;
-            if (next < 0) next = slides.length - 1;
-            else if (next + (visibleSlides - 1) >= slides.length) next = 0;
-            return next;
-        });
-    };
 
     const handleClosePopup = () => {
         setIsClosing(true);
@@ -145,13 +145,13 @@ export default function Home() {
             <section style={{ marginTop: "8rem" }}>
                 <div className="card-container">
                     {/* Desktop */}
-                    <a href={FOOT_ROUTE} className="card-link card gauche">
+                    <a href={FOOT_ROUTE} className="card-link card gauche" style={{ backgroundSize: "90%", height: "650px" }}>
                         <div className="card"><h3 style={{ margin: "0" }}>Foot</h3></div>
                     </a>
-                    <a href={CHEER_ROUTE} className="card-link card face" style={{ backgroundSize: "90%" }}>
+                    <a href={CHEER_ROUTE} className="card-link card face" style={{ backgroundSize: "90%", height: "650px" }}>
                         <div className="card"><h3 style={{ margin: "0" }}>Cheer</h3></div>
                     </a>
-                    <a href={FLAG_ROUTE} className="card-link card droite">
+                    <a href={FLAG_ROUTE} className="card-link card droite" style={{ backgroundSize: "85%", height: "650px" }}>
                         <div className="card"><h3 style={{ margin: "0" }}>Flag</h3></div>
                     </a>
 
@@ -219,17 +219,29 @@ export default function Home() {
                     <ArrowBallLeft width={90} height={90} className="slider-arrow-svg arrow-left" />
                 </div>
                 <div className="slider-wrapper">
-                    <div className="slider-track" style={{ width: `${(slides.length / visibleSlides) * 100}%`, transform: `translateX(-${(currentSlide * 105) / slides.length}%)`, gap: "0.5rem" }}>
-                        {slides.map((slide, index) => (
-                            <div className="slider-card" key={index} onClick={() => setSelectedSlide(slide)} style={{ flex: `0 0 calc(${100 / slides.length}% - 0.5rem)`, boxSizing: "border-box", cursor: "pointer" }}>
-                                <Image src={slide.images[0].src} alt={`Slide ${index + 1}`} width={300} height={300} />
-                                <div className="slider-card-text">
-                                    <h3 style={{ color: "var(--background)" }}>{slide.title}</h3>
-                                    <p>{slide.description}</p>
+                    <div className="slider-track" style={{ transform: `translateX(-${(currentSlide * 105) / slides.length}%)`, width: `${(slides.length / visibleSlides) * 100}%`, gap: "0.5rem" }}>
+                        {slides.map((slide, index) => {
+                            const dateObj = new Date(slide.date ?? "");
+                            const dateStr = dateObj.toLocaleDateString("fr-FR", { day: "2-digit", month: "short" });
+
+                            return (
+                                <div
+                                    className="slider-card"
+                                    key={index}
+                                    onClick={() => setSelectedSlide(slide)}
+                                    style={{ flex: `0 0 calc(${100 / slides.length}% - 1rem)`, height: "320px" }}
+                                >
+                                    <Image src={slide.images[0].src} alt={`Slide ${index + 1}`} width={300} height={300} />
+                                    <div className="slider-card-date">{dateStr}</div>
+                                    <div className="slider-card-overlay">
+                                        <h3>{slide.title}</h3>
+                                        <p>{slide.resume}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
+
                 </div>
                 <div className="slider-arrow right" onClick={() => slide(1)}>
                     <ArrowBallRight width={90} height={90} className="slider-arrow-svg arrow-right" />
@@ -238,15 +250,47 @@ export default function Home() {
 
             {selectedSlide && (
                 <div className={`popup-overlay ${isClosing ? "fade-out" : ""}`} onClick={handleClosePopup} >
-                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }} className="popup-content" onClick={(e) => e.stopPropagation()} >
+                    <div className="popup-content" onClick={(e) => e.stopPropagation()}>
                         <button className="popup-close" onClick={handleClosePopup}>✕</button>
-                        <h2 style={{ textAlign: "center" }}>{selectedSlide.title}</h2>
-                        <Image src={selectedSlide.images[0].src} alt={selectedSlide.title} width={500} height={300} style={{ borderRadius: "12px", width: "80%", height: "80%" }} />
-                        <p style={{ marginTop: "1rem", color: "var(--main-color)" }}>{selectedSlide.description}</p>
-                        {selectedSlide.link && (
-                            <a href={selectedSlide.link[0]} target="_blank" rel="noopener noreferrer" className="popup-link">En savoir plus</a>
-                        )}
+
+                        <div className="popup-body">
+                            <div className="popup-left popup-images">
+                                {selectedSlide.images.map((img, idx) => (
+                                    <Image
+                                        key={idx}
+                                        src={img.src}
+                                        alt={`${selectedSlide.title} ${idx + 1}`}
+                                        width={220}
+                                        height={145}
+                                        className="popup-side-image"
+                                    />
+                                ))}
+                            </div>
+
+                            <div className="popup-right popup-content-text">
+                                <h2 className="popup-title">{selectedSlide.title}</h2>
+                                <p className="popup-date">
+                                    {new Date(selectedSlide.date ?? "").toLocaleDateString("fr-FR", {
+                                        day: "2-digit",
+                                        month: "long",
+                                        year: "numeric"
+                                    })}
+                                </p>
+                                <p className="popup-description">{selectedSlide.description}</p>
+                                {selectedSlide.link && (
+                                    <a
+                                        href={selectedSlide.link[0]}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="popup-link"
+                                    >
+                                        {selectedSlide.link[1] || "En savoir plus"}
+                                    </a>
+                                )}
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             )}
         </div>

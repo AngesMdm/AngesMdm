@@ -1,26 +1,23 @@
 [
     {
         "title": "J3 Football américain",
-        "resume": "resume",
+        "resume": "on a gagné",
         "images": [
             {
                 "src": "/assets/images/actus/actus1.jpg",
                 "alt": "Actus1 Image"
-            },
-            {
-                "src": "/assets/images/actus/actus1.jpg",
-                "alt": "Actus1 Image 2"
             }
         ],
         "description": "on a gagné",
         "link": {
             "url": "https://example.com/actus1",
             "text": "Lire plus"
-        }
+        },
+        "date": "2025-07-15"
     },
     {
         "title": "J3 Championnat de France Flag football",
-        "resume": "resume",
+        "resume": "on a gagné aussi",
         "images": [
             {
                 "src": "/assets/images/actus/actus2.jpg",
@@ -35,25 +32,47 @@
         "link": {
             "url": "https://example.com/actus1",
             "text": "Lire plus"
-        }
+        },
+        "date": "2025-07-15"
     },
     {
         "title": "J3 Football américain",
-        "resume": "resume",
+        "resume": "on a gagné",
         "images": [
             {
                 "src": "/assets/images/actus/actus1.jpg",
                 "alt": "Actus3 Image"
             },
             {
-                "src": "/assets/images/actus/actus1.jpg",
+                "src": "/assets/images/actus/actus2.jpg",
                 "alt": "Actus3 Image 2"
             }
         ],
-        "description": "on a encore gagné",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
         "link": {
             "url": "https://example.com/actus1",
             "text": "Lire plus"
-        }
+        },
+        "date": "2025-07-15"
+    },
+    {
+        "title": "J3 Championnat de France Flag football",
+        "resume": "on a gagné",
+        "images": [
+            {
+                "src": "/assets/images/actus/actus2.jpg",
+                "alt": "Actus2 Image"
+            },
+            {
+                "src": "/assets/images/actus/actus2.jpg",
+                "alt": "Actus2 Image 2"
+            }
+        ],
+        "description": "on a gagné aussi",
+        "link": {
+            "url": "https://example.com/actus1",
+            "text": "Lire plus"
+        },
+        "date": "2025-07-15"
     }
 ]
