@@ -1,75 +1,6 @@
 import { Folder, MediaFile } from "@/types/type";
 import Query from "../db";
 
-
-/**
- * Récupère l'arborescence des dossiers jusqu'à une profondeur donnée
- * @param depth Profondeur maximale à explorer (par défaut 2)
- * @returns Une promesse contenant la liste des dossiers
- */
-export async function getFolderTree(depth = 2): Promise<Folder[]> {
-  const bddResponse = await Query(`
-    WITH RECURSIVE folder_tree AS (
-      SELECT id, name, parent_id, created_at, 1 AS depth
-      FROM folders
-      WHERE parent_id IS NULL
-
-      UNION ALL
-
-      SELECT f.id, f.name, f.parent_id, f.created_at, ft.depth + 1
-      FROM folders f
-      JOIN folder_tree ft ON f.parent_id = ft.id
-      WHERE ft.depth < $1
-    )
-    SELECT * FROM folder_tree
-    ORDER BY parent_id NULLS FIRST, name;
-  `, [depth]);
-
-  return bddResponse.rows as Folder[];
-}
-
-
-/**
- * Récupère les fichiers média directement présents dans un dossier (sans sous-dossiers)
- * @param folderId L'identifiant du dossier
- * @param limit Nombre maximum de fichiers à récupérer (facultatif)
- * @param offset Décalage pour la pagination (facultatif)
- * @returns Une promesse contenant les fichiers trouvés
- */
-export async function getMediaInFolder(folderId: number, limit = 50, offset = 0): Promise<MediaFile[]> {
-  const bddResponse = await Query(`
-    SELECT *
-    FROM media_files
-    WHERE folder_id = $1
-    ORDER BY uploaded_at DESC
-    LIMIT $2 OFFSET $3;
-  `, [folderId, limit, offset]);
-
-  return bddResponse.rows as MediaFile[];
-}
-
-/**
- * Récupère tous les fichiers média d’un dossier et de ses sous-dossiers
- * @param folderId L'identifiant du dossier racine
- * @returns Une promesse contenant les fichiers trouvés
- */
-export async function getMediaInFolderAndSubfolders(folderId: number): Promise<MediaFile[]> {
-  const bddResponse = await Query(`
-    WITH RECURSIVE subfolders AS (
-      SELECT id FROM folders WHERE id = $1
-      UNION ALL
-      SELECT f.id FROM folders f
-      JOIN subfolders sf ON f.parent_id = sf.id
-    )
-    SELECT m.*
-    FROM media_files m
-    WHERE m.folder_id IN (SELECT id FROM subfolders)
-    ORDER BY uploaded_at DESC;
-  `, [folderId]);
-
-  return bddResponse.rows as MediaFile[];
-}
-
 /**
  * Récupère tous les dossiers
  * @returns Une promesse contenant la liste des dossiers
@@ -81,6 +12,7 @@ export async function getAllFolders(): Promise<{
     parent_id: number | null;
     created_at: string;
     media_count: number;
+    updated_at: string | null;
   }[];
   mediaFiles: {
     id: number;
@@ -91,7 +23,7 @@ export async function getAllFolders(): Promise<{
   }[];
 }> {
   const foldersRes = await Query(`
-    SELECT id, name, parent_id, created_at, media_count
+    SELECT id, name, parent_id, created_at, media_count, updated_at
     FROM folders
     ORDER BY name;
   `);
@@ -113,30 +45,94 @@ export async function getAllFolders(): Promise<{
  * @param folderId ID du dossier courant
  */
 export async function getFolderSnapshot(folderId: number): Promise<{
-  subfolders: Folder[],
+  folder: Folder,
+  folders: Folder[],
   mediaFiles: MediaFile[]
 }> {
-  const [foldersResponse, filesResponse] = await Promise.all([
-    Query(`
-      SELECT id, name, parent_id, created_at, media_count
-      FROM folders
-      WHERE parent_id = $1
-      ORDER BY name;
-    `, [folderId]),
+  // 1️⃣ Récupérer le dossier lui-même
+  const folderRes = await Query(
+    `SELECT id, name, parent_id, media_count, updated_at FROM folders WHERE id = $1`,
+    [folderId]
+  );
+  if (folderRes.rows.length === 0) {
+    throw new Error("Dossier introuvable");
+  }
+  const folder = folderRes.rows[0] as Folder;
 
-    Query(`
-      SELECT id, name, url, type, uploaded_at, folder_id
-      FROM media_files
-      WHERE folder_id = $1
-      ORDER BY uploaded_at DESC;
-    `, [folderId])
+  // 2️⃣ Récupérer les sous-dossiers et fichiers
+  const [foldersResponse, filesResponse] = await Promise.all([
+    Query(
+      `SELECT id, name, parent_id, created_at, media_count, updated_at
+       FROM folders
+       WHERE parent_id = $1
+       ORDER BY name`,
+      [folderId]
+    ),
+    Query(
+      `SELECT id, name, url, type, uploaded_at, folder_id
+       FROM media_files
+       WHERE folder_id = $1
+       ORDER BY uploaded_at DESC`,
+      [folderId]
+    )
   ]);
 
   return {
-    subfolders: foldersResponse.rows as Folder[],
-    mediaFiles: filesResponse.rows as MediaFile[],
+    folder,
+    folders: foldersResponse.rows as Folder[],
+    mediaFiles: filesResponse.rows as MediaFile[]
   };
 }
+
+
+/**
+ * Récupère la date de mise à jour d'un dossier
+ * @param folderId ID du dossier
+ * @returns Date de mise à jour ou null
+ */
+export async function getUpdatedDate(folderId: number): Promise<string | null> {
+  const result = await Query(`
+    SELECT updated_at
+    FROM folders
+    WHERE id = $1;
+  `, [folderId]);
+
+  return result.rows[0]?.updated_at || null;
+}
+
+/**
+ * Recherche des dossiers et fichiers par nom
+ * @param searchTerm La chaîne à rechercher
+ */
+export async function searchMediaAndFolders(searchTerm: string): Promise<{
+  folders: Folder[],
+  mediaFiles: MediaFile[]
+}> {
+  const likePattern = `%${searchTerm}%`;
+
+  const [foldersResponse, filesResponse] = await Promise.all([
+    Query(
+      `SELECT id, name, parent_id, created_at, media_count, updated_at
+       FROM folders
+       WHERE name ILIKE $1
+       ORDER BY name`,
+      [likePattern]
+    ),
+    Query(
+      `SELECT id, name, url, type, uploaded_at, folder_id
+       FROM media_files
+       WHERE name ILIKE $1
+       ORDER BY uploaded_at DESC`,
+      [likePattern]
+    )
+  ]);
+
+  return {
+    folders: foldersResponse.rows as Folder[],
+    mediaFiles: filesResponse.rows as MediaFile[]
+  };
+}
+
 
 /**
  * Ajoute des fichiers dans un dossier
@@ -176,8 +172,8 @@ export async function addFilesToFolder(folderId: number, files: { name: string; 
  */
 export async function createFolder(name: string, parentId: number | null = null): Promise<number> {
   const result = await Query(`
-    INSERT INTO folders (name, parent_id, created_at)
-    VALUES ($1, $2, NOW())
+    INSERT INTO folders (name, parent_id, created_at, updated_at)
+    VALUES ($1, $2, NOW(), NOW())
     RETURNING id;
   `, [name, parentId]);
 

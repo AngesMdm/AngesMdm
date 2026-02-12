@@ -8,6 +8,7 @@ import "@/styles/slider-query.css";
 import { ArrowBallLeft, ArrowBallRight } from "@/components/svg/arrowBall.svg";
 import { Actus } from "@/types/actus.type";
 import { STAFF_ROUTE, BUREAU_ROUTE, FOOT_ROUTE, FLAG_ROUTE, CHEER_ROUTE } from "@/constants/app.route.const";
+import { GoForText } from "@/components/svg/text.svg";
 
 export default function Home() {
     const [slides, setSlides] = useState<Actus[]>([]);
@@ -133,12 +134,29 @@ export default function Home() {
         return () => window.removeEventListener("resize", onResize);
     }, []);
 
+    useEffect(() => {
+        if (selectedSlide) {
+            document.documentElement.style.overflow = "hidden";
+            document.body.style.overflow = "hidden";
+        } else {
+            document.documentElement.style.overflow = "";
+            document.body.style.overflow = "";
+        }
+
+        return () => {
+            document.documentElement.style.overflow = "";
+            document.body.style.overflow = "";
+        };
+    }, [selectedSlide]);
+
     return (
         <div>
             <div className="hero-section">
                 <div className="hero-bg" />
                 <div className="hero-overlay">
+                    {/* <h1 className="hero-title"><GoForText width={1500} height={100} /></h1> */}
                     <h1 className="hero-title">GO FOR TEAM, GO FOR WIN, GO FOR ANGES</h1>
+
                 </div>
             </div>
 
@@ -197,14 +215,14 @@ export default function Home() {
                 <h2 className="section-title">L'Équipe</h2>
                 <div className="team-scroll-container">
                     <a href={STAFF_ROUTE} className="team-card" data-scroll="left">
-                        <div className="team-image" style={{ backgroundImage: "url('/assets/images/staff.png')" }} />
+                        <div className="team-image" style={{ backgroundImage: "url('/assets/images/staff3.png')" }} />
                         <div className="team-content">
                             <h3>Le Staff</h3>
                             <p>Coachs et encadrants dévoués à la progression des joueurs.</p>
                         </div>
                     </a>
                     <a href={BUREAU_ROUTE} className="team-card" data-scroll="right">
-                        <div className="team-image" style={{ backgroundImage: "url('/assets/images/bureau.png')" }} />
+                        <div className="team-image" style={{ backgroundImage: "url('/assets/images/bureau3.png')" }} />
                         <div className="team-content">
                             <h3>Le Bureau</h3>
                             <p>L'administration et la gestion du club au quotidien.</p>

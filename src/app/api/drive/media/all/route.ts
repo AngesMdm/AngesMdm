@@ -21,9 +21,10 @@ export async function GET(req: Request): Promise<Response> {
       id: folderId,
       name: folder.name,
       type: "folder",
-      mediaCount: folder.media_count,
+      media_count: folder.media_count,
       children: [],
       parent_id: folder.parent_id,
+      updated_at: folder.updated_at || new Date().toISOString(),
     };
   }
 

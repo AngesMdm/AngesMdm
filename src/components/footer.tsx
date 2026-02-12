@@ -19,18 +19,17 @@ export const Footer = memo(() => {
                         <a href="https://www.instagram.com/anges.mdm/"><Image src="/assets/icons/instagram.png" alt="Instagram" width={40} height={40} /></a>
                         <a href="https://www.facebook.com/anges.mdm/"><Image src="/assets/icons/facebook.png" alt="Facebook" width={40} height={40} /></a>
                         <a href="https://www.tiktok.com/@anges.mdm/"><Image src="/assets/icons/tiktok.png" alt="TikTok" width={40} height={40} /></a>
-                        <a href="https://www.youtube.com/@angesmontdemarsan9931/"><Image src="/assets/icons/youtube.png" alt="Youtube" width={45} height={40} /></a>
+                        <a href="https://www.youtube.com/@Angesmdm/"><Image src="/assets/icons/youtube.png" alt="Youtube" width={45} height={40} /></a>
                     </div>
                 </div>
 
                 <div className="footer-section">
                     <h4>Partenaires</h4>
                     <div className="partner-logos">
-                        {/* <Image src="/assets/images/partenaires/addict.png" alt="Addict" width={55} height={55} />
-                        <Image src="/assets/images/partenaires/bagarre.png" alt="Bagarre" width={55} height={55} />
-                        <Image src="/assets/images/partenaires/cookie.png" alt="Cookie" width={55} height={55} />
+                        <Image src="/assets/images/partenaires/addict.png" alt="Addict" width={55} height={55} />
                         <Image src="/assets/images/partenaires/havana.png" alt="havana" width={55} height={55} />
-                        <Image src="/assets/images/partenaires/ufips.jpg" alt="UFIPS" width={55} height={55} /> */}
+                        {/* <Image src="/assets/images/partenaires/renaissance.jpg" alt="renaissance" width={55} height={55} />
+                        <Image src="/assets/images/partenaires/qg.jpg" alt="qg" width={55} height={55} /> */}
                     </div>
                 </div>
 

@@ -113,3 +113,30 @@
 .foot-poste-card.teams {
     border-left: 4px solid #ffcc00;
 }
+
+
+/* Orientation verticale */
+.foot-postes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2.5rem;
+}
+
+.foot-poste-card {
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.foot-poste-img {
+    height: 340px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.foot-poste-desc {
+    font-size: 1rem;
+    text-align: center;
+}

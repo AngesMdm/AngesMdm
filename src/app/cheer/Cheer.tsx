@@ -22,10 +22,10 @@ export default function CheerPage() {
                 <div className="cheer-disciplines-grid">
                     {disciplines.map((el, i) => (
                         <RevealCascade key={i} index={i}>
-                            <div className="cheer-card">
-                                <div className="cheer-img" style={{ backgroundImage: `url(${el.image})` }} />
-                                <div className="cheer-title">{el.nom}</div>
-                                <div className="cheer-desc">{el.description}</div>
+                            <div className="cheer-discipline-card">
+                                <div className="cheer-discipline-img" style={{ backgroundImage: `url(${el.image})` }} />
+                                <div className="cheer-discipline-title">{el.nom}</div>
+                                <div className="cheer-discipline-desc">{el.description}</div>
                             </div>
                         </RevealCascade>
                     ))}

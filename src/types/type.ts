@@ -11,7 +11,8 @@ export type Folder = {
     name: string;
     type: "folder";
     children: Array<MediaFile | Folder>;
-    mediaCount: number;
+    media_count: number;
+    updated_at: string;
 };
 
 export type FAQ = {

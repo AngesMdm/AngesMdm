@@ -2,7 +2,8 @@
     background-color: var(--background);
     color: var(--main-color);
     font-family: 'Segoe UI', sans-serif;
-    overflow-x: hidden;
+    overflow: hidden;
+    
 }
 
 .nous-rejoindre-hero {

@@ -39,9 +39,42 @@ h2, p{
   color: var(--main-color);
 }
 
-/*
-TODO
-- mettre en default scale 0.8 et au hover scale 1
-- light theme
-- edit actus
-*/
+
+.hero-title svg path{
+  fill: transparent;
+  stroke: #fff;
+  stroke-width: 1.5;
+  stroke-dasharray: 670;
+  stroke-dashoffset: 670;
+  animation: textAnimation 3s ease-in-out 1 forwards;
+  text-shadow: 0 0 10px rgba(226, 96, 16, 0.7);
+}
+.hero-title svg {
+  filter: drop-shadow(0 0 10px rgba(226, 96, 16, 0.7));
+}
+
+@keyframes textAnimation {
+  0%{
+    stroke-dashoffset: 670;
+  }
+  80%{
+    fill: transparent;
+  }
+  100%{
+    fill: #fff;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* .hero-bg::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/images/pp.jpeg');
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+  mask-image: url("/assets/test/1.gif");
+  mask-size: cover;
+  mask-position: center;
+} */

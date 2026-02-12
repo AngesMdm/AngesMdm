@@ -7,6 +7,7 @@ export const metadata = {
   openGraph: {
     title: 'Anges MDM — Club de Football Américain, Flag et Cheer à Mont-de-Marsan',
     images: ['/assets/images/logo.png'],
+    siteName: 'Anges MDM',
   },
   viewport: {
     width: 'device-width',

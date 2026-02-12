@@ -74,3 +74,73 @@ CREATE TRIGGER trg_update_media_count
 AFTER INSERT OR DELETE ON media_files
 FOR EACH ROW
 EXECUTE FUNCTION update_folder_media_count();
+
+/*
+TODO
+-- Ajouter la colonne updated_at aux dossiers
+ALTER TABLE folders
+ADD COLUMN updated_at TIMESTAMP DEFAULT NOW();
+
+-- Déclencheur pour mettre à jour updated_at à chaque modification
+CREATE OR REPLACE FUNCTION update_folders_self_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_folders_self_updated_at
+BEFORE UPDATE ON folders
+FOR EACH ROW
+EXECUTE FUNCTION update_folders_self_updated_at();
+
+//
+CREATE OR REPLACE FUNCTION touch_parent_on_folder_change()
+RETURNS TRIGGER AS $$
+BEGIN
+  -- si le dossier a un parent, mettre à jour updated_at du parent
+  IF (TG_OP = 'INSERT') THEN
+    UPDATE folders SET updated_at = NOW() WHERE id = NEW.parent_id;
+  ELSIF (TG_OP = 'DELETE') THEN
+    UPDATE folders SET updated_at = NOW() WHERE id = OLD.parent_id;
+  ELSIF (TG_OP = 'UPDATE') THEN
+    -- si le parent change, toucher l’ancien et le nouveau
+    IF NEW.parent_id IS DISTINCT FROM OLD.parent_id THEN
+      UPDATE folders SET updated_at = NOW() WHERE id = OLD.parent_id;
+      UPDATE folders SET updated_at = NOW() WHERE id = NEW.parent_id;
+    END IF;
+  END IF;
+  RETURN NULL; -- on ne modifie pas la ligne enfant
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_parent_updated_on_folder_change
+AFTER INSERT OR UPDATE OR DELETE ON folders
+FOR EACH ROW
+EXECUTE FUNCTION touch_parent_on_folder_change();
+
+//
+CREATE OR REPLACE FUNCTION touch_parent_on_file_change()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF (TG_OP = 'INSERT') THEN
+    UPDATE folders SET updated_at = NOW() WHERE id = NEW.folder_id;
+  ELSIF (TG_OP = 'DELETE') THEN
+    UPDATE folders SET updated_at = NOW() WHERE id = OLD.folder_id;
+  ELSIF (TG_OP = 'UPDATE') THEN
+    IF NEW.folder_id IS DISTINCT FROM OLD.folder_id THEN
+      UPDATE folders SET updated_at = NOW() WHERE id = OLD.folder_id;
+      UPDATE folders SET updated_at = NOW() WHERE id = NEW.folder_id;
+    END IF;
+  END IF;
+  RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_parent_updated_on_file_change
+AFTER INSERT OR UPDATE OR DELETE ON media_files
+FOR EACH ROW
+EXECUTE FUNCTION touch_parent_on_file_change();
+
+*/

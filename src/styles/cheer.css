@@ -64,7 +64,7 @@
   height: 200px;
   border-radius: 1rem;
   background-size: cover;
-  background-position: center;
+  background-position: center 30%;
   margin-bottom: 1rem;
 }
 
@@ -90,4 +90,36 @@
   font-size: 2.5rem;
   color: var(--orange-color);
   margin-bottom: 2rem;
+}
+
+.cheer-discipline-card {
+    border-left: 4px solid var(--orange-color);
+}
+
+/* Orientation verticale */
+.cheer-disciplines-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2.5rem;
+}
+
+.cheer-discipline-card {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cheer-discipline-img {
+  height: 340px;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-bottom: 1rem;
+}
+
+.cheer-discipline-desc {
+  font-size: 1rem;
+  color: #ccc;
+  text-align: center;
 }

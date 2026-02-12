@@ -4,39 +4,17 @@ import { Folder, MediaFile } from "@/types/type";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { getFolderFromCache, saveFolderToCache } from "@/lib/folderCache";
 import FaqSection from "@/components/FaqSection";
 
 const exampleData: Folder = {
     id: "root",
     name: "Racine",
     type: "folder",
-    mediaCount: 0,
+    media_count: 0,
     children: [
-        {
-            id: "folder1",
-            name: "Photos et Vidéos",
-            type: "folder",
-            mediaCount: 2,
-            children: [
-                {
-                    id: "folder1-1",
-                    name: "Vidéos",
-                    type: "folder",
-                    mediaCount: 1,
-                    children: [{ id: "vid2", name: "oui.mp4", type: "file", fileType: "video", url: "/assets/images/oui.MP4" }],
-                },
-                { id: "img1", name: "le logo la.jpg", type: "file", fileType: "image", url: "/assets/images/logo.png" },
-                { id: "vid1", name: "Meilleur QB de France.mp4", type: "file", fileType: "video", url: "/assets/images/rickroll.mp4" },
-            ],
-        },
-        {
-            id: "folder2",
-            name: "Images",
-            type: "folder",
-            mediaCount: 1,
-            children: [{ id: "img2", name: "logo.jpg", type: "file", fileType: "image", url: "/assets/images/logo.png" }],
-        },
     ],
+    updated_at: new Date().toISOString(),
 };
 
 export default function Drive() {
@@ -61,9 +39,12 @@ export default function Drive() {
      * Ouvre un dossier et met à jour le chemin actuel
      * @param folder Dossier à ouvrir
      */
-    function openFolder(folder: Folder) {
-        setPathStack((prev) => [...prev, folder]);
+    async function openFolder(folder: Folder) {
         setSelectedFile(null);
+        const data = await fetchFolder(folder.id);
+        if (data) {
+            setPathStack((prev) => [...prev, data]);
+        }
     }
 
     /**
@@ -155,8 +136,9 @@ export default function Drive() {
                 id: newFolder.id,
                 name: newFolder.name,
                 type: "folder",
-                mediaCount: 0,
+                media_count: 0,
                 children: [],
+                updated_at: new Date().toISOString(),
             });
         });
 
@@ -282,7 +264,7 @@ export default function Drive() {
     }
 
     // Fonction pour déplacer un item vers un dossier cible
-    async function moveItemToFolder(itemId: string, targetFolderId: string) { //TODO 
+    async function moveItemToFolder(itemId: string, targetFolderId: string) {
         if (!itemId) return;
 
         let itemToMove: MediaFile | Folder | null = null;
@@ -334,7 +316,7 @@ export default function Drive() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     itemType: (itemToMove as Folder).type,
-                    itemId: (itemToMove as Folder).id.replace(/^folder-|file-/, ""), // enlever préfixe
+                    itemId: (itemToMove as Folder).id.replace(/^folder-|file-/, ""),
                     targetFolderId: targetFolderId === "root" ? null : parseInt(targetFolderId.replace(/^folder-/, ""), 10),
                 }),
             });
@@ -383,7 +365,6 @@ export default function Drive() {
             const response = await fetch("/api/drive/media/all");
             if (!response.ok) throw new Error("Erreur lors de la récupération des FAQ");
             const data = (await response.json())[0] as Folder;
-            console.log("Données récupérées :", data);
             setRootFolder(data);
             setPathStack([data])
             currentFolder = [data][[data].length - 1]
@@ -393,7 +374,59 @@ export default function Drive() {
         }
     };
 
-    useEffect(() => { fetchDriveList(); }, []);
+    //useEffect(() => { fetchDriveList(); }, []);
+
+
+    const fetchFolder = async (folderId: string) => {
+        try {
+            const cached = await getFolderFromCache(folderId);
+            const id = folderId.replace(/^folder-/, "");
+            if (cached) {
+                // Vérifier updatedAt côté serveur
+                const headRes = await fetch(`/api/drive/media/${encodeURIComponent(id)}/updatedAt`);
+                const { updated_at } = await headRes.json();
+
+                if (updated_at === cached.updated_at) {
+                    if (folderId == "folder-1") {
+                        setRootFolder(cached);
+                        setPathStack([cached]);
+                        currentFolder = cached;
+                        setFolderListForMove(flattenFolders(cached));
+                    }
+                    return cached;
+                }
+            }
+
+            // Pas dans le cache ou outdated
+            const response = await fetch(`/api/drive/media/${encodeURIComponent(id)}`);
+            if (!response.ok) throw new Error("Erreur lors de la récupération du dossier");
+            const data: Folder = await response.json();
+
+            saveFolderToCache(data);
+            if (folderId == "folder-1") {
+                setRootFolder(data);
+                setPathStack([data]);
+                currentFolder = data;
+                setFolderListForMove(flattenFolders(data));
+            }
+            return data;
+
+        } catch (error) {
+            console.error("Erreur lors de la récupération du dossier :", error);
+        }
+    };
+
+    useEffect(() => { fetchFolder("folder-1"); }, []);
+
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const handleSearch = async () => {
+        if (!searchTerm) return;
+
+        const res = await fetch(`/api/search?query=${encodeURIComponent(searchTerm)}`);
+        const data = await res.json();
+        console.log("Résultats de la recherche :", data);
+    };
 
     if (status === "loading") return <p>Chargement...</p>;
     if (!session) return null;
@@ -401,6 +434,19 @@ export default function Drive() {
     return (
         <main style={{ padding: "1rem", marginTop: "5rem", minHeight: "700px", backgroundColor: "var(--background)", color: "var(--main-color)" }}>
             <h1>Mon Drive</h1>
+
+            <div style={{ marginBottom: "1rem", display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <input
+                    type="text"
+                    placeholder="Rechercher..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{ padding: "0.5rem", borderRadius: "6px", flex: 1 }}
+                />
+                <button onClick={handleSearch} style={{ padding: "0.5rem 1rem", backgroundColor: "var(--orange-color)", color: "white", borderRadius: "6px", cursor: "pointer" }}>
+                    🔍
+                </button>
+            </div>
             <div style={{ marginBottom: "1rem", display: "flex", alignItems: "center", gap: "1rem" }}>
                 <button onClick={goBack} disabled={pathStack.length === 1} style={{ padding: "0.5rem 1rem", backgroundColor: pathStack.length === 1 ? "#ccc" : "var(--orange-color)", color: "white", border: "none", borderRadius: "6px", cursor: pathStack.length === 1 ? "not-allowed" : "pointer" }}>
                     ← Retour
