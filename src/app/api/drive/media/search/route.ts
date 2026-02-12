@@ -27,16 +27,19 @@ import { getUpdatedDate } from "@/lib/requests/drive.requests";
 
 // TODO juste pour build
 export async function GET(
-    req: Request,
-    context: { params: Promise<{ id: string }> } 
-    ): Promise<Response> {
+    req: Request): Promise<Response> {
     const session = await getServerSession(authOptions);
 
     if (!session) {
         return new Response(JSON.stringify({ error: "Non autorisé" }), { status: 401 });
     }
-
-    const { id } = await context.params;
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+    
+    if (!id) {
+        return new Response(JSON.stringify({ error: "ID manquant" }), { status: 400 });
+    }
+    
     const folderId = parseInt(id, 10);
 
     if (isNaN(folderId)) {
