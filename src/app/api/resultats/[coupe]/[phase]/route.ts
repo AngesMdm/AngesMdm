@@ -13,8 +13,10 @@ export async function GET(req: Request, context: any): Promise<Response> {
         return new Response(JSON.stringify({ error: "Phase non spécifiée" }), { status: 400 });
     }
     try {
+        const isDevelopment = process.env.NODE_ENV === 'development' && process.env.MODE !== 'production';
+
         const res = await fetch(
-            `${process.env.BLOB_RESULTS_URL}${encodeURIComponent(decodedCoupe)}/${encodeURIComponent(decodedPhase)}/resultats.json`,
+            `${isDevelopment ? process.env.BLOB_RESULTS_URL : process.env.BLOB_READ_WRITE_TOKEN}${encodeURIComponent(decodedCoupe)}/${encodeURIComponent(decodedPhase)}/resultats.json`,
             { cache: "no-store" }
         );
         if (!res.ok) {
