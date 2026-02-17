@@ -1,7 +1,7 @@
 "use client";
 import { memo, useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { HOME_ROUTE, FLAG_ROUTE, FOOT_ROUTE, CHEER_ROUTE, LOGIN_ROUTE, DRIVE_ROUTE, STAFF_ROUTE, BUREAU_ROUTE, NOUS_REJOINDRE_ROUTE } from "@/constants/app.route.const";
+import { HOME_ROUTE, FLAG_ROUTE, FOOT_ROUTE, CHEER_ROUTE, LOGIN_ROUTE, DRIVE_ROUTE, STAFF_ROUTE, BUREAU_ROUTE, NOUS_REJOINDRE_ROUTE, RESULTATS_ROUTE } from "@/constants/app.route.const";
 import { useSession, signOut } from "next-auth/react";
 
 export const Header = memo(() => {
@@ -13,6 +13,8 @@ export const Header = memo(() => {
     const [isMobile, setIsMobile] = useState(false);
     const prevScroll = useRef(0);
     const menuRef = useRef<HTMLLIElement>(null);
+    const [sectionsOpen, setSectionsOpen] = useState(false);
+    const sectionsRef = useRef<HTMLDivElement>(null);
 
     // Scroll handler pour cacher header
     useEffect(() => {
@@ -35,6 +37,10 @@ export const Header = memo(() => {
             if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
                 setMenuOpen(false);
             }
+            if (sectionsRef.current && !sectionsRef.current.contains(e.target as Node)) {
+                setSectionsOpen(false);
+            }
+
         };
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -87,11 +93,20 @@ export const Header = memo(() => {
                     )}
                     {!isMobile && (
                         <>
-                            <a href={FOOT_ROUTE} className="nav-link">Foot</a>
-                            <a href={CHEER_ROUTE} className="nav-link">Cheer</a>
-                            <a href={FLAG_ROUTE} className="nav-link">Flag</a>
+                            <div className="nav-dropdown" ref={sectionsRef}>
+                                <span className="nav-link dropdown-toggle" onClick={() => setSectionsOpen(!sectionsOpen)}> Sections <span className={`arrow ${sectionsOpen ? "rotate" : ""}`}> ▼ </span></span>
+
+                                {sectionsOpen && (
+                                    <div className="dropdown-menu">
+                                        <a href={FOOT_ROUTE} className="dropdown-item">Foot</a>
+                                        <a href={FLAG_ROUTE} className="dropdown-item">Flag</a>
+                                        <a href={CHEER_ROUTE} className="dropdown-item">Cheer</a>
+                                    </div>
+                                )}
+                            </div>
                             <a href={STAFF_ROUTE} className="nav-link">Staff</a>
                             <a href={BUREAU_ROUTE} className="nav-link">Bureau</a>
+                            <a href={RESULTATS_ROUTE} className="nav-link">Résultats</a>
                         </>
                     )}
                 </div>
@@ -123,11 +138,21 @@ export const Header = memo(() => {
             {(mobileMenuOpen || isClosing) && (
                 <div className="mobile-dropdown" style={{ animation: isClosing ? "zoomToLogo 0.3s ease-in forwards" : "dezoomFromLogo 0.3s ease-out forwards" }}>
                     <a href={HOME_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Accueil</a>
-                    <a href={FLAG_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Flag</a>
-                    <a href={FOOT_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Foot</a>
-                    <a href={CHEER_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Cheer</a>
+                    <span className="dropdown-item" onClick={() => setSectionsOpen(!sectionsOpen)}> Sections<span className={`arrow ${sectionsOpen ? "rotate" : ""}`}>▼</span>
+
+                        {sectionsOpen && (
+                            <div className="dropdown-submenu open">
+                                <a href={FOOT_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Foot</a>
+                                <a href={FLAG_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Flag</a>
+                                <a href={CHEER_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Cheer</a>
+                            </div>
+                        )}
+                    </span>
+
+
                     <a href={STAFF_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Staff</a>
                     <a href={BUREAU_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Bureau</a>
+                    <a href={RESULTATS_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Résultats</a>
                     <a href={NOUS_REJOINDRE_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Nous rejoindre</a>
                     {session?.user ? (
                         <>

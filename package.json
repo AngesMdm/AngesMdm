@@ -12,10 +12,11 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.850.0",
     "@types/pg": "^8.15.4",
+    "@vercel/blob": "^2.2.0",
     "bcryptjs": "^3.0.2",
     "idb": "^8.0.3",
     "next": "^16.0.8",
-    "next-auth": "^4.24.11",
+    "next-auth": "^4.24.13",
     "next-sitemap": "^4.2.3",
     "pg": "^8.16.0",
     "react": "^19.0.0",

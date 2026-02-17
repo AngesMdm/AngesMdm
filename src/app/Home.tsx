@@ -8,7 +8,6 @@ import "@/styles/slider-query.css";
 import { ArrowBallLeft, ArrowBallRight } from "@/components/svg/arrowBall.svg";
 import { Actus } from "@/types/actus.type";
 import { STAFF_ROUTE, BUREAU_ROUTE, FOOT_ROUTE, FLAG_ROUTE, CHEER_ROUTE } from "@/constants/app.route.const";
-import { GoForText } from "@/components/svg/text.svg";
 
 export default function Home() {
     const [slides, setSlides] = useState<Actus[]>([]);
@@ -154,7 +153,6 @@ export default function Home() {
             <div className="hero-section">
                 <div className="hero-bg" />
                 <div className="hero-overlay">
-                    {/* <h1 className="hero-title"><GoForText width={1500} height={100} /></h1> */}
                     <h1 className="hero-title">GO FOR TEAM, GO FOR WIN, GO FOR ANGES</h1>
 
                 </div>

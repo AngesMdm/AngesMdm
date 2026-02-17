@@ -7,18 +7,19 @@ import { Footer } from "../components/footer";
 import { Providers } from "./provider";
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-      <body style={{ margin: 0, padding: 0, fontFamily: 'Arial, sans-serif' }}>
+      <body className="app-layout">
         <Providers>
           <Header />
 
-          {children}
+          <main className="app-content">
+            {children}
+          </main>
+
           <Footer />
         </Providers>
       </body>

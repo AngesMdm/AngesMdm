@@ -28,8 +28,8 @@ export const Footer = memo(() => {
                     <div className="partner-logos">
                         <Image src="/assets/images/partenaires/addict.png" alt="Addict" width={55} height={55} />
                         <Image src="/assets/images/partenaires/havana.png" alt="havana" width={55} height={55} />
-                        {/* <Image src="/assets/images/partenaires/renaissance.jpg" alt="renaissance" width={55} height={55} />
-                        <Image src="/assets/images/partenaires/qg.jpg" alt="qg" width={55} height={55} /> */}
+                        <Image src="/assets/images/partenaires/renaissance.jpg" alt="renaissance" width={55} height={55} />
+                        <Image src="/assets/images/partenaires/qg.jpg" alt="qg" width={55} height={55} />
                     </div>
                 </div>
 

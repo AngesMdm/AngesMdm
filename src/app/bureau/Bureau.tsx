@@ -3,15 +3,15 @@ import RevealCascade from "@/components/RevealOnSCroll";
 import "@/styles/bureau.css";
 
 const bureauData = [
-    { name: "Tony", role: "Communication", image: "/assets/images/staff&bureau/tony.png" },
-    { name: "Pepito", role: "Président", image: "/assets/images/staff&bureau/pepito.png" },
-    { name: "Mag", role: "Secrétaire", image: "/assets/images/staff&bureau/mag.png" },
-    { name: "Chris", role: "Gestion des arbitres", image: "/assets/images/staff&bureau/chris.png", fixTop: true },
-    { name: "Rémis", role: "Foot", image: "/assets/images/staff&bureau/remis.png" },
-    { name: "Ju", role: "Administratif", image: "/assets/images/staff&bureau/ju.png", fixTop: true },
-    { name: "Vincent", role: "Trésorier", image: "/assets/images/staff&bureau/vincent.png" },
-    { name: "Margaux", role: "Cheerleading", image: "/assets/images/staff&bureau/margaux.png" },
-    { name: "Nico", role: "Flag", image: "/assets/images/staff&bureau/nico.png" },
+    { name: "Tony", role: "Communication", image: "/assets/images/staff&bureau/tony.png", fixTop: false },
+    { name: "Pepito", role: "Président", image: "/assets/images/staff&bureau/pepito.png", fixTop: false },
+    { name: "Mag", role: "Secrétaire", image: "/assets/images/staff&bureau/mag.png", fixTop: false },
+    // { name: "Chris", role: "Gestion des arbitres", image: "/assets/images/staff&bureau/chris.png", fixTop: true },
+    // { name: "Rémis", role: "Foot", image: "/assets/images/staff&bureau/remis.png" },
+    // { name: "Ju", role: "Administratif", image: "/assets/images/staff&bureau/ju.png", fixTop: true },
+    // { name: "Vincent", role: "Trésorier", image: "/assets/images/staff&bureau/vincent.png" },
+    // { name: "Margaux", role: "Cheerleading", image: "/assets/images/staff&bureau/margaux.png" },
+    // { name: "Nico", role: "Flag", image: "/assets/images/staff&bureau/nico.png" }
 ];
 
 export default function BureauPage() {
