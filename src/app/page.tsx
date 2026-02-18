@@ -5,7 +5,7 @@ export const metadata = {
 
   title: {
     default: 'Anges de Mont-de-Marsan',
-    template: '%s | Anges MDM',
+    template: '%s | Anges de Mont-de-Marsan',
   },
 
   description:

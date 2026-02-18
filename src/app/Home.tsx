@@ -8,6 +8,7 @@ import "@/styles/slider-query.css";
 import { ArrowBallLeft, ArrowBallRight } from "@/components/svg/arrowBall.svg";
 import { Actus } from "@/types/actus.type";
 import { STAFF_ROUTE, BUREAU_ROUTE, FOOT_ROUTE, FLAG_ROUTE, CHEER_ROUTE } from "@/constants/app.route.const";
+import Calendar from "@/components/Calendar";
 
 export default function Home() {
     const [slides, setSlides] = useState<Actus[]>([]);
@@ -229,7 +230,8 @@ export default function Home() {
                 </div>
             </section>
 
-            <h2 className="section-title" style={{ textAlign: "center", marginTop: "6rem" }}>L'Actualité</h2>
+            <Calendar />
+            {/* <h2 className="section-title" style={{ textAlign: "center", marginTop: "6rem" }}>L'Actualité</h2>
             <section className="slider" style={{ marginBottom: "10rem" }}>
                 <div className="slider-arrow left" onClick={() => slide(-1)}>
                     <ArrowBallLeft width={90} height={90} className="slider-arrow-svg arrow-left" />
@@ -308,7 +310,8 @@ export default function Home() {
                     </div>
 
                 </div>
-            )}
+            )} */}
+
         </div>
     );
 }

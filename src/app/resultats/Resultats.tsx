@@ -5,7 +5,7 @@ type Day = { id: number; label: string; date: string }
 type Club = { label: string, logo?: string }
 type Ranking = { position: number; club: Club; points: number; j: number; g: number; n: number; p: number; points_won: number; points_loss: number; points_diff: number }
 type Team = { name: string; score: number }
-type Match = { date: string; team_a: Team; team_b: Team }
+type Match = { id: number; date: string; team_a: Team; team_b: Team }
 
 type ChampionshipData = {
     days: Day[]
@@ -108,7 +108,7 @@ export default function Resultats() {
 
             <section style={{ marginBottom: 40 }}>
                 {data.days.map(day => {
-                    const matchesOfDay = data.matches.filter(m => new Date(m.date).toLocaleDateString() === new Date(day.date).toLocaleDateString() && (m.team_a.name.toLowerCase().includes("anges") || m.team_b.name.toLowerCase().includes("anges")))
+                    const matchesOfDay = data.matches.filter(m => m.id === day.id && (m.team_a.name.toLowerCase().includes("anges") || m.team_b.name.toLowerCase().includes("anges")))
                     const isOpen = openDayId === day.id
                     return matchesOfDay.length > 0 && (
                         <div key={day.id} style={{ marginBottom: 18 }}>
