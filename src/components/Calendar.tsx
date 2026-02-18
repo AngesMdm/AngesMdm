@@ -80,7 +80,7 @@ export default function Calendar() {
                 "/assets/images/teams/FLAGMINGOS.png",
                 "/assets/images/teams/BLUERAVENS.png",
             ],
-            icon: "/assets/images/flag-calendar2.svg"
+            icon: "/assets/images/flag-calendar.svg"
         },
         "2026-02-08": {
             type: "multiple",
@@ -117,6 +117,12 @@ export default function Calendar() {
             ],
             icon: "/assets/images/flag-calendar2.svg"
         },
+        "2026-03-14": {
+            type: "vs",
+            images: [
+                "/assets/images/teams/ANGES.png", "/assets/images/teams/SPHINX.png",],
+            icon: "/assets/images/foot-junior.svg"
+        },
         "2026-03-15": {
             type: "multiple",
             images: [
@@ -125,12 +131,24 @@ export default function Calendar() {
                 "/assets/images/teams/FLAGMINGOS.png",
                 "/assets/images/teams/BLUERAVENS.png",
             ],
-            icon: "/assets/images/flag-calendar2.svg"
+            icon: "/assets/images/flag-calendar.svg"
         },
         "2026-03-21": {
             type: "vs",
             images: ["/assets/images/teams/ANGES.png", "/assets/images/teams/BLUERAVENS.png"],
             icon: "/assets/images/ball.svg"
+        },
+        "2026-03-22": {
+            type: "vs",
+            images: [
+                "/assets/images/teams/ANGES.png", "/assets/images/teams/SPHINX.png",],
+            icon: "/assets/images/foot-junior.svg"
+        },
+        "2026-03-28": {
+            type: "vs",
+            images: [
+                "/assets/images/teams/ANGES.png", "/assets/images/teams/SPHINX.png",],
+            icon: "/assets/images/foot-junior.svg"
         },
         "2026-03-29": {
             type: "multiple",
@@ -150,7 +168,7 @@ export default function Calendar() {
                 "/assets/images/teams/FLAGMINGOS.png",
                 "/assets/images/teams/BLUERAVENS.png",
             ],
-            icon: "/assets/images/flag-calendar2.svg"
+            icon: "/assets/images/flag-calendar.svg"
         },
         "2026-04-11": {
             type: "vs",
@@ -165,7 +183,7 @@ export default function Calendar() {
                 "/assets/images/teams/FLAGMINGOS.png",
                 "/assets/images/teams/BLUERAVENS.png",
             ],
-            icon: "/assets/images/flag-calendar2.svg"
+            icon: "/assets/images/flag-calendar.svg"
         },
     };
 
