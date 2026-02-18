@@ -214,14 +214,14 @@ export default function Home() {
                 <h2 className="section-title">L'Équipe</h2>
                 <div className="team-scroll-container">
                     <a href={STAFF_ROUTE} className="team-card" data-scroll="left">
-                        <div className="team-image" style={{ backgroundImage: "url('/assets/images/staff3.png')" }} />
+                        <div className="team-image" style={{ backgroundImage: "url('/assets/images/staff.png')" }} />
                         <div className="team-content">
                             <h3>Le Staff</h3>
                             <p>Coachs et encadrants dévoués à la progression des joueurs.</p>
                         </div>
                     </a>
                     <a href={BUREAU_ROUTE} className="team-card" data-scroll="right">
-                        <div className="team-image" style={{ backgroundImage: "url('/assets/images/bureau3.png')" }} />
+                        <div className="team-image" style={{ backgroundImage: "url('/assets/images/bureau.png')" }} />
                         <div className="team-content">
                             <h3>Le Bureau</h3>
                             <p>L'administration et la gestion du club au quotidien.</p>
