@@ -1,11 +1,9 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import "@/styles/home.css";
 import "@/styles/slider.css";
 import "@/styles/popup.css";
 import "@/styles/slider-query.css";
-import { ArrowBallLeft, ArrowBallRight } from "@/components/svg/arrowBall.svg";
 import { Actus } from "@/types/actus.type";
 import { STAFF_ROUTE, BUREAU_ROUTE, FOOT_ROUTE, FLAG_ROUTE, CHEER_ROUTE } from "@/constants/app.route.const";
 import Calendar from "@/components/Calendar";

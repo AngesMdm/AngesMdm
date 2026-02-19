@@ -1,5 +1,6 @@
 "use client"
 import { use, useEffect, useState } from "react"
+import "@/styles/resultats.css"
 
 type Day = { id: number; label: string; date: string }
 type Club = { label: string, logo?: string }
@@ -52,12 +53,12 @@ export default function Resultats() {
         }
     }, [selectedPhase])
 
-    if (!data) return <p>Chargement des résultats...</p>
+    if (!data) return <h1 style={{ padding: "6rem" }}>Chargement des résultats...</h1>
 
     const handleDayToggle = (id: number) => setOpenDayId(openDayId === id ? null : id)
 
     return (
-        <div style={{ fontFamily: "Arial, sans-serif", padding: "100px 10px 0 10px", width: "65%", margin: "0 auto", color: "#fff" }}>
+        <div style={{ fontFamily: "Arial, sans-serif", padding: "100px 10px 0 10px", width: "65%", margin: "0 auto", color: "#fff" }} className="main-results">
             <h1 style={{ marginBottom: 40, fontSize: "2rem", fontWeight: 700, letterSpacing: "1px" }}>Résultats & Classements</h1>
 
             <div style={{ display: "flex", gap: 10, marginBottom: 25 }}>
@@ -124,7 +125,7 @@ export default function Resultats() {
                                         return (
                                             <div key={idx} style={{ display: "grid", gridTemplateColumns: "1fr 90px 1fr", alignItems: "center", padding: "10px 0", borderBottom: "1px solid var(--card-border)" }}>
                                                 <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 10, fontWeight: winner === "a" ? 700 : 500 }}>
-                                                    <span>{match.team_a.name}</span>
+                                                    <span className="team-name">{match.team_a.name}</span>
                                                     <img src={"/assets/images/teams/" + match.team_a.name.replace(/\s+/g, '') + ".png"} alt={match.team_a.name} width={26} height={26} />
                                                 </div>
 
@@ -135,7 +136,7 @@ export default function Resultats() {
 
                                                 <div style={{ display: "flex", alignItems: "center", gap: 10, fontWeight: winner === "b" ? 700 : 500 }}>
                                                     <img src={"/assets/images/teams/" + match.team_b.name.replace(/\s+/g, '') + ".png"} alt={match.team_b.name} width={26} height={26} />
-                                                    <span>{match.team_b.name}</span>
+                                                    <span className="team-name">{match.team_b.name}</span>
                                                 </div>
                                             </div>
                                         )

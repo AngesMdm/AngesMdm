@@ -137,7 +137,8 @@
 }
 
 .slider-arrow-svg:hover .arrow-fill {
-  fill: var(--orange-color);
+  /* fill: var(--orange-color); */
+  filter: drop-shadow(5px 5px 30px var(--orange-color));
 }
 
 @media (max-width: 800px) {

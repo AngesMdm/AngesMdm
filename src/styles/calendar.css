@@ -158,3 +158,49 @@
 .calendar-cell:hover .calendar-multiple img {
   transform: scale(1.08);
 }
+
+
+
+.calendar-legend {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+@media (max-width: 768px) {
+  .calendar-content {
+      display: none;
+  }
+  .calendar-cell {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .calendar-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .calendar-date {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    font-size: 0.75rem;
+  }
+  .calendar-container{
+      padding: .5rem;
+  }
+  .calendar-cell:hover .calendar-icon {
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+}

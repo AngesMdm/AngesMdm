@@ -253,6 +253,25 @@ export default function Calendar() {
                         );
                     })}
                 </div>
+                <div className="calendar-legend">
+                    <div className="legend-item">
+                        <Image src="/assets/images/flag-calendar.svg" alt="" width={20} height={20} />
+                        <span>Coupe de France</span>
+                    </div>
+                    <div className="legend-item">
+                        <Image src="/assets/images/flag-calendar2.svg" alt="" width={20} height={20} />
+                        <span>Championnat Mixte</span>
+                    </div>
+                    <div className="legend-item">
+                        <Image src="/assets/images/ball.svg" alt="" width={20} height={20} />
+                        <span>Football Américain</span>
+                    </div>
+                    <div className="legend-item">
+                        <Image src="/assets/images/foot-junior.svg" alt="" width={20} height={20} />
+                        <span>Football Américain Junior</span>
+                    </div>
+                </div>
+
             </section>
         </>
     );

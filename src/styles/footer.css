@@ -46,3 +46,9 @@ a:hover img {
     transform: scale(1.1);
     transform: rotate(3deg);
 }
+
+@media (max-width: 600px) {
+    .site-footer{
+        padding: .5rem;
+    }
+}
