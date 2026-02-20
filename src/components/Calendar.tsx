@@ -1,14 +1,12 @@
 "use client";
 import "@/styles/calendar.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ArrowBallLeft, ArrowBallRight } from "@/components/svg/arrowBall.svg";
 
 export default function Calendar() {
     const [currentDate, setCurrentDate] = useState(new Date());
-
-    const today = new Date();
-    const todayString = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
+    const [todayString, setTodayString] = useState("");
 
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -187,6 +185,11 @@ export default function Calendar() {
         },
     };
 
+    useEffect(() => {
+        const now = new Date();
+        const localToday = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0") + "-" + String(now.getDate()).padStart(2, "0");
+        setTodayString(localToday);
+    }, []);
     return (
         <>
             <h2 className="section-title" style={{ textAlign: "center", marginTop: "6rem" }}>Calendrier</h2>
@@ -221,7 +224,7 @@ export default function Calendar() {
                         const event = events[day.fullDate];
 
                         return (
-                            <div key={index} className={`calendar-cell ${!day.currentMonth ? "other-month" : ""}${day.isToday ? "today" : ""}`}>
+                            <div key={index} className={`calendar-cell ${!day.currentMonth ? "other-month" : ""} ${day.isToday ? "today" : ""}`}>
                                 <div className="calendar-date">{day.dayNumber}</div>
 
                                 {event?.icon && (
