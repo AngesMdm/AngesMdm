@@ -13,7 +13,7 @@ const secretaire = { name: "Magalie Calderon", role: "SECRÉTAIRE", image: "/ass
 const membres = [
     { name: "Pierre Baudoin", role: "MEMBRE", image: "/assets/images/staff&bureau/pierre.png" },
     { name: "Julien Fabre", role: "MEMBRE", image: "/assets/images/staff&bureau/julien.png" },
-    { name: "Remi Nagiscarde", role: "MEMBRE", image: "/assets/images/staff&bureau/remis.png" },
+    { name: "Rémi Nagiscarde", role: "MEMBRE", image: "/assets/images/staff&bureau/remis.png" },
     { name: "Benjamin Fillancq", role: "MEMBRE", image: "/assets/images/staff&bureau/benjamin.png" },
     { name: "Zoe Lamothe", role: "MEMBRE", image: "/assets/images/staff&bureau/zoe.png" },
 ];
