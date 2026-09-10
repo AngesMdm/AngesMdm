@@ -3,6 +3,7 @@
 import RevealCascade from "@/components/RevealOnSCroll";
 import Slider from "@/components/Slider";
 import "@/styles/foot.css";
+import Link from "next/link";
 
 export default function FootPage() {
     return (
@@ -16,6 +17,23 @@ export default function FootPage() {
                         un système millimétré.
                     </p>
                 </div>
+            </section>
+
+            <section className="foot-join-cta">
+                <RevealCascade index={0}>
+                    <div className="cta-container">
+                        <div className="cta-content">
+                            <h2>Prêt à relever le défi ?</h2>
+                            {/* <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p> */}
+                        </div>
+                        <Link href="/nous-rejoindre" className="cta-button-glow">
+                            <span>Nous rejoindre</span>
+                            <div className="cta-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                            </div>
+                        </Link>
+                    </div>
+                </RevealCascade>
             </section>
 
             <section className="foot-postes">
@@ -94,12 +112,12 @@ const defense = [
     {
         nom: "Defensive Line (DL)",
         image: "/assets/images/foot/dl.png",
-        description: "Gros gabarits chargés de stopper la course ou d’atteindre le QB."
+        description: "Gros gabarit chargé de stopper la course ou d’atteindre le QB."
     },
     {
         nom: "Linebacker (LB)",
         image: "/assets/images/foot/lb.png",
-        description: "Polivalent, il défend la course et couvre les passes."
+        description: "Polyvalent, il défend la course et couvre les passes."
     },
     {
         nom: "Cornerback (CB)",
@@ -107,7 +125,7 @@ const defense = [
         description: "Spécialiste de la couverture des receveurs adverses."
     },
     {
-        nom: "Safety",
+        nom: "Safety (S)",
         image: "/assets/images/foot/safety.png",
         description: "Dernière ligne de défense, rapide et lucide."
     },
@@ -115,17 +133,17 @@ const defense = [
 
 const teams = [
     {
-        nom: "Kicker",
+        nom: "Kicker (K)",
         image: "/assets/images/foot/kicker.png",
         description: "Spécialiste du tir au pied : engagements, transformations et field goals."
     },
     {
-        nom: "Punter",
+        nom: "Punter (P)",
         image: "/assets/images/foot/punter.png",
-        description: "Dégage loin la balle lors des 4e tentatives."
+        description: "Dégage loin la balle lors de la 4ème tentative."
     },
     {
-        nom: "Returner",
+        nom: "Returner (KR)",
         image: "/assets/images/foot/returner.png",
         description: "Remonte les ballons bottés par l’adversaire."
     },

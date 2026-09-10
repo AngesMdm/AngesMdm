@@ -105,31 +105,73 @@ export async function getUpdatedDate(folderId: number): Promise<string | null> {
  * @param searchTerm La chaîne à rechercher
  */
 export async function searchMediaAndFolders(searchTerm: string): Promise<{
-  folders: Folder[],
-  mediaFiles: MediaFile[]
+  folders: {
+    id: number;
+    name: string;
+    parent_id: number | null;
+    media_count: number;
+    updated_at: string | null;
+    path_ids: number[];
+    path_names: string[];
+  }[];
+  mediaFiles: {
+    id: number;
+    name: string;
+    url: string;
+    type: "video" | "image";
+    folder_id: number;
+    path_ids: number[];
+    path_names: string[];
+  }[];
 }> {
   const likePattern = `%${searchTerm}%`;
 
   const [foldersResponse, filesResponse] = await Promise.all([
     Query(
-      `SELECT id, name, parent_id, created_at, media_count, updated_at
-       FROM folders
+      `WITH RECURSIVE folder_tree AS (
+         SELECT id, name, parent_id, media_count, updated_at,
+                ARRAY[id] AS path_ids, ARRAY[name] AS path_names
+         FROM folders
+         WHERE parent_id IS NULL
+         UNION ALL
+         SELECT child.id, child.name, child.parent_id, child.media_count, child.updated_at,
+                parent.path_ids || child.id, parent.path_names || child.name
+         FROM folders child
+         JOIN folder_tree parent ON child.parent_id = parent.id
+       )
+       SELECT id, name, parent_id, media_count, updated_at, path_ids, path_names
+       FROM folder_tree
        WHERE name ILIKE $1
-       ORDER BY name`,
+       ORDER BY name
+       LIMIT 50`,
       [likePattern]
     ),
     Query(
-      `SELECT id, name, url, type, uploaded_at, folder_id
-       FROM media_files
-       WHERE name ILIKE $1
-       ORDER BY uploaded_at DESC`,
+      `WITH RECURSIVE folder_tree AS (
+         SELECT id, name, parent_id,
+                ARRAY[id] AS path_ids, ARRAY[name] AS path_names
+         FROM folders
+         WHERE parent_id IS NULL
+         UNION ALL
+         SELECT child.id, child.name, child.parent_id,
+                parent.path_ids || child.id, parent.path_names || child.name
+         FROM folders child
+         JOIN folder_tree parent ON child.parent_id = parent.id
+       )
+       SELECT media.id, media.name, media.url, media.type, media.folder_id,
+              folder_tree.path_ids, folder_tree.path_names
+       FROM media_files media
+       JOIN folder_tree ON folder_tree.id = media.folder_id
+       WHERE media.name ILIKE $1
+       ORDER BY media.uploaded_at DESC
+       LIMIT 50`,
       [likePattern]
     )
   ]);
 
   return {
-    folders: foldersResponse.rows as Folder[],
-    mediaFiles: filesResponse.rows as MediaFile[]
+    folders: foldersResponse.rows,
+    mediaFiles: filesResponse.rows
   };
 }
 

@@ -41,7 +41,10 @@ const { folder, folders, mediaFiles } = await getFolderSnapshot(folderId);
     return new Response(
     JSON.stringify({
         id: `folder-${folder.id}`,
-        updated_at: folder.updated_at,  // ✅ la date exacte du dossier
+        name: folder.name,
+        type: "folder",
+        media_count: folder.media_count,
+        updated_at: folder.updated_at,
         mediaCount: folder.media_count,
         children
     }),

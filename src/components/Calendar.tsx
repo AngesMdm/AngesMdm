@@ -7,6 +7,7 @@ import { ArrowBallLeft, ArrowBallRight } from "@/components/svg/arrowBall.svg";
 export default function Calendar() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [todayString, setTodayString] = useState("");
+    const [selectedEvent, setSelectedEvent] = useState<any>(null);
 
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -181,8 +182,21 @@ export default function Calendar() {
                 "/assets/images/teams/FLAGMINGOS.png",
                 "/assets/images/teams/BLUERAVENS.png",
             ],
-            icon: "/assets/images/flag-calendar.svg"
+            icon: "/assets/images/flag-calendar.svg",
+            time: "14h00",
+            location: "Stade de la Pépinière, 1 Rue de la Pépinière, 17000 La Rochelle",
+            title: "Coupe de France - 1/4 de finale"
         },
+        // "2026-09-19": {
+        //     type: "multiple",
+        //     teams: [
+        //         { name: "Anges", logo: "/assets/images/teams/ANGES.png" },
+        //         { name: "Sphinx", logo: "/assets/images/teams/SPHINX.png" },
+        //     ],
+        //     location: "Stade des Anges",
+        //     time: "14:30",
+        //     title: "Match de championnat",
+        // },
     };
 
     useEffect(() => {
@@ -193,6 +207,31 @@ export default function Calendar() {
     return (
         <>
             <h2 className="section-title" style={{ textAlign: "center", marginTop: "6rem" }}>Calendrier</h2>
+
+            {selectedEvent && (
+                <div className="modal-overlay" onClick={() => setSelectedEvent(null)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <button className="close-btn" onClick={() => setSelectedEvent(null)}>×</button>
+                        <h2 className="modal-title">Détails de l'événement</h2>
+
+                        <div className="modal-info">
+                            <p style={{ color: "white" }}><strong >📅 Date :</strong> {new Date(selectedEvent.date).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                            <p style={{ color: "white" }}><strong >⏰ Heure :</strong> {selectedEvent.time || "Non définie"}</p>
+                            <p style={{ color: "white" }}><strong >📍 Lieu :</strong> {selectedEvent.location || "À confirmer"}</p>
+                        </div>
+
+                        <h3 className="teams-title">Équipes participantes :</h3>
+                        <div className="modal-teams-grid">
+                            {selectedEvent.teams.map((team: any, i: number) => (
+                                <div key={i} className="event-team-card">
+                                    <Image src={team.logo} alt={team.name} width={50} height={50} />
+                                    <span>{team.name}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <section className="calendar-container">
 
@@ -224,7 +263,7 @@ export default function Calendar() {
                         const event = events[day.fullDate];
 
                         return (
-                            <div key={index} className={`calendar-cell ${!day.currentMonth ? "other-month" : ""} ${day.isToday ? "today" : ""}`}>
+                            <div key={index} onClick={() => event && setSelectedEvent({ ...event, date: day.fullDate })} className={`calendar-cell ${!day.currentMonth ? "other-month" : ""} ${day.isToday ? "today" : ""}`}>
                                 <div className="calendar-date">{day.dayNumber}</div>
 
                                 {event?.icon && (
@@ -233,23 +272,27 @@ export default function Calendar() {
 
                                 {event && (
                                     <div className="calendar-content">
-
                                         {event.type === "vs" && (
                                             <div className="calendar-vs">
-                                                <Image src={event.images[0]} alt="" width={28} height={28} />
+                                                <Image src={event.teams ? event.teams[0].logo : event.images[0]} alt="" width={28} height={28} />
                                                 <span className="vs-text">VS</span>
-                                                <Image src={event.images[1]} alt="" width={28} height={28} />
+                                                <Image src={event.teams ? event.teams[1].logo : event.images[1]} alt="" width={28} height={28} />
                                             </div>
                                         )}
 
                                         {event.type === "multiple" && (
                                             <div className="calendar-multiple">
-                                                {event.images.map((img: string, idx: number) => (
-                                                    <Image key={idx} src={img} alt="" width={24} height={24} />
+                                                {(event.teams || event.images)?.map((item: any, idx: number) => (
+                                                    <Image
+                                                        key={idx}
+                                                        src={item.logo || item}
+                                                        alt=""
+                                                        width={24}
+                                                        height={24}
+                                                    />
                                                 ))}
                                             </div>
                                         )}
-
                                     </div>
                                 )}
                             </div>
@@ -272,6 +315,10 @@ export default function Calendar() {
                     <div className="legend-item">
                         <Image src="/assets/images/foot-junior.svg" alt="" width={20} height={20} />
                         <span>Football Américain Junior</span>
+                    </div>
+                    <div className="legend-item">
+                        <Image src="/assets/images/cheerbow.png" alt="" width={20} height={20} />
+                        <span>Cheerleading</span>
                     </div>
                 </div>
 

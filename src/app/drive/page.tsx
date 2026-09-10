@@ -17,6 +17,16 @@ const exampleData: Folder = {
     updated_at: new Date().toISOString(),
 };
 
+type DriveSearchResult = {
+    id: string;
+    name: string;
+    type: "folder" | "file";
+    fileType?: "image" | "video";
+    url?: string;
+    path: string;
+    pathIds: string[];
+};
+
 export default function Drive() {
     const { data: session, status } = useSession();
     const router = useRouter();
@@ -381,7 +391,7 @@ export default function Drive() {
         try {
             const cached = await getFolderFromCache(folderId);
             const id = folderId.replace(/^folder-/, "");
-            if (cached) {
+            if (cached?.name) {
                 // Vérifier updatedAt côté serveur
                 const headRes = await fetch(`/api/drive/media/${encodeURIComponent(id)}/updatedAt`);
                 const { updated_at } = await headRes.json();
@@ -419,14 +429,69 @@ export default function Drive() {
     useEffect(() => { fetchFolder("folder-1"); }, []);
 
     const [searchTerm, setSearchTerm] = useState("");
+    const [searchResults, setSearchResults] = useState<DriveSearchResult[]>([]);
+    const [isSearching, setIsSearching] = useState(false);
 
-    const handleSearch = async () => {
-        if (!searchTerm) return;
+    useEffect(() => {
+        const query = searchTerm.trim();
+        if (query.length < 2) {
+            setSearchResults([]);
+            setIsSearching(false);
+            return;
+        }
 
-        const res = await fetch(`/api/search?query=${encodeURIComponent(searchTerm)}`);
-        const data = await res.json();
-        console.log("Résultats de la recherche :", data);
-    };
+        const controller = new AbortController();
+        const timeout = window.setTimeout(async () => {
+            setIsSearching(true);
+            try {
+                const response = await fetch(
+                    `/api/drive/media/search?query=${encodeURIComponent(query)}`,
+                    { signal: controller.signal }
+                );
+                if (!response.ok) throw new Error("Erreur lors de la recherche");
+                const data = await response.json();
+                setSearchResults([
+                    ...data.folders,
+                    ...data.mediaFiles,
+                ]);
+            } catch (error) {
+                if ((error as Error).name !== "AbortError") {
+                    console.error("Erreur lors de la recherche du drive :", error);
+                    setSearchResults([]);
+                }
+            } finally {
+                if (!controller.signal.aborted) setIsSearching(false);
+            }
+        }, 300);
+
+        return () => {
+            window.clearTimeout(timeout);
+            controller.abort();
+        };
+    }, [searchTerm]);
+
+    async function openSearchResult(result: DriveSearchResult) {
+        if (result.type === "file" && result.url) {
+            setSelectedFile({
+                id: result.id,
+                name: result.name,
+                type: "file",
+                fileType: result.fileType!,
+                url: result.url,
+            });
+        }
+
+        const folders: Folder[] = [];
+        for (const folderId of result.pathIds) {
+            const folder = await fetchFolder(folderId);
+            if (folder) folders.push(folder);
+        }
+        if (folders.length > 0) {
+            setPathStack(folders);
+            if (result.type === "folder") setSelectedFile(null);
+        }
+        setSearchTerm("");
+    }
 
     if (status === "loading") return <p>Chargement...</p>;
     if (!session) return null;
@@ -435,18 +500,35 @@ export default function Drive() {
         <main style={{ padding: "1rem", marginTop: "5rem", minHeight: "700px", backgroundColor: "var(--background)", color: "var(--main-color)" }}>
             <h1>Mon Drive</h1>
 
-            <div style={{ marginBottom: "1rem", display: "flex", gap: "0.5rem", alignItems: "center" }}>
+            {/* <div style={{ marginBottom: "1rem", display: "flex", gap: "0.5rem", alignItems: "center" }}>
                 <input
                     type="text"
-                    placeholder="Rechercher..."
+                    placeholder="Rechercher un fichier ou un dossier..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style={{ padding: "0.5rem", borderRadius: "6px", flex: 1 }}
                 />
-                <button onClick={handleSearch} style={{ padding: "0.5rem 1rem", backgroundColor: "var(--orange-color)", color: "white", borderRadius: "6px", cursor: "pointer" }}>
-                    🔍
-                </button>
-            </div>
+                {isSearching && <span>Recherche...</span>}
+            </div> */}
+
+            {searchTerm.trim().length >= 2 && !isSearching && (
+                <div style={{ marginBottom: "1rem", border: "1px solid #aaa", borderRadius: "8px", padding: "0.75rem" }}>
+                    {searchResults.length === 0 ? (
+                        <p>Aucun résultat.</p>
+                    ) : (
+                        searchResults.map((result) => (
+                            <button
+                                key={`${result.type}-${result.id}`}
+                                onClick={() => openSearchResult(result)}
+                                style={{ display: "block", width: "100%", padding: "0.6rem", border: 0, borderBottom: "1px solid #ddd", background: "transparent", color: "inherit", textAlign: "left", cursor: "pointer" }}
+                            >
+                                <strong>{result.type === "folder" ? "📁" : "📄"} {result.name}</strong>
+                                <small style={{ display: "block", opacity: 0.75 }}>{result.path || "Racine"}</small>
+                            </button>
+                        ))
+                    )}
+                </div>
+            )}
             <div style={{ marginBottom: "1rem", display: "flex", alignItems: "center", gap: "1rem" }}>
                 <button onClick={goBack} disabled={pathStack.length === 1} style={{ padding: "0.5rem 1rem", backgroundColor: pathStack.length === 1 ? "#ccc" : "var(--orange-color)", color: "white", border: "none", borderRadius: "6px", cursor: pathStack.length === 1 ? "not-allowed" : "pointer" }}>
                     ← Retour

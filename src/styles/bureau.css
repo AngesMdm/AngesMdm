@@ -87,3 +87,69 @@
   color: var(--orange-color);
   font-weight: 600;
 }
+
+
+.org-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 2rem;
+  margin-top: 5rem;
+}
+
+.org-line {
+  width: 2px;
+  height: 40px;
+  background-color: var(--orange-color, #ff4500);
+}
+
+.org-presidents {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-bottom: 0;
+}
+
+.org-secretary {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.org-horizontal-line {
+  width: 80%;
+  height: 2px;
+  background-color: var(--orange-color, #ff4500);
+  position: relative;
+}
+
+.org-members-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  align-items: flex-start;
+  margin-top: 0;
+  flex-wrap: wrap;
+}
+
+.org-member-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 150px;
+}
+
+.org-member-line {
+  width: 2px;
+  height: 20px;
+  background-color: var(--orange-color, #ff4500);
+}
+
+@media (max-width: 1024px) {
+  .org-members-row { gap: 0.5rem; }
+  .org-horizontal-line { width: 95%; }
+}
