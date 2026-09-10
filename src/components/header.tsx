@@ -113,7 +113,8 @@ export const Header = memo(() => {
 
                 {!isMobile && (
                     <nav className="header-nav">
-                        <a href={NOUS_REJOINDRE_ROUTE} className="nav-list" style={{ textDecoration: "none", color: "var(--main-color)" }}>Nous rejoindre</a>
+                        <a href="https://www.helloasso.com/associations/les-anges-40/adhesions/adhesion-2026-2027" className="nav-list" style={{ textDecoration: "none", color: "var(--main-color)" }}>Nous rejoindre</a>
+                        {/* <a href={NOUS_REJOINDRE_ROUTE} className="nav-list" style={{ textDecoration: "none", color: "var(--main-color)" }}>Nous rejoindre</a> */}
                         <ul className="nav-list">
                             {session?.user ? (
                                 <li className="nav-item user-menu" ref={menuRef}>
@@ -153,7 +154,8 @@ export const Header = memo(() => {
                     <a href={STAFF_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Staff</a>
                     <a href={BUREAU_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Bureau</a>
                     <a href={RESULTATS_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Résultats</a>
-                    <a href={NOUS_REJOINDRE_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Nous rejoindre</a>
+                    <a href="https://www.helloasso.com/associations/les-anges-40/adhesions/adhesion-2026-2027" className="dropdown-item" onClick={closeMobileMenu}>Nous rejoindre</a>
+                    {/* <a href={NOUS_REJOINDRE_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Nous rejoindre</a> */}
                     {session?.user ? (
                         <>
                             <a href={DRIVE_ROUTE} className="dropdown-item" onClick={closeMobileMenu}>Drive</a>

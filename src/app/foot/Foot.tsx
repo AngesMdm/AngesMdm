@@ -26,7 +26,8 @@ export default function FootPage() {
                             <h2>Prêt à relever le défi ?</h2>
                             {/* <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p> */}
                         </div>
-                        <Link href="/nous-rejoindre" className="cta-button-glow">
+                        <Link href="https://www.helloasso.com/associations/les-anges-40/adhesions/adhesion-2026-2027" className="cta-button-glow">
+                            {/* <Link href="/nous-rejoindre" className="cta-button-glow"> */}
                             <span>Nous rejoindre</span>
                             <div className="cta-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>

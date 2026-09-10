@@ -7,7 +7,7 @@ const staffData = [
     { name: "Yoann", role: "Coach Flag", image: "/assets/images/staff&bureau/pepito.png" },
     { name: "Benjamin", role: "Coach Foot", image: "/assets/images/staff&bureau/benjamin.png" },
     { name: "Rémi", role: "Coach Juniors", image: "/assets/images/staff&bureau/remis.png" },
-    { name: "Margaux", role: "Coach cheer", image: "/assets/images/staff&bureau/margaux.png" },
+    { name: "Emma", role: "Coach cheer", image: "/assets/images/staff&bureau/emma.png" },
     { name: "Carla", role: "Coach cheer", image: "/assets/images/staff&bureau/carla.png" },
     { name: "Magalie", role: "Arbitre", image: "/assets/images/staff&bureau/mag.png" },
     { name: "Thomas", role: "Arbitre", image: "/assets/images/staff&bureau/thomas.png" },
