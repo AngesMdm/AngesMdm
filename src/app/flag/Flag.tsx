@@ -2,6 +2,7 @@
 import "@/styles/flag.css";
 import RevealCascade from "@/components/RevealOnSCroll";
 import Slider from "@/components/Slider";
+import Link from "next/link";
 
 export default function FlagPage() {
     return (
@@ -16,6 +17,23 @@ export default function FlagPage() {
                         stratégie, agilité et coordination.
                     </p>
                 </div>
+            </section>
+
+            <section className="foot-join-cta">
+                <RevealCascade index={0}>
+                    <div className="cta-container">
+                        <div className="cta-content">
+                            <h2>Prêt à relever le défi ?</h2>
+                            {/* <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p> */}
+                        </div>
+                        <Link href="/nous-rejoindre" className="cta-button-glow">
+                            <span>Nous rejoindre</span>
+                            <div className="cta-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                            </div>
+                        </Link>
+                    </div>
+                </RevealCascade>
             </section>
 
             <section className="flag-postes">
@@ -69,7 +87,7 @@ const positions = [
     },
     {
         type: "attaque",
-        nom: "Center",
+        nom: "Center (C)",
         image: "/assets/images/flag/center.png",
         description: "Il engage le jeu en passant la balle au QB. Il peut aussi participer au blocage ou se libérer pour recevoir."
     },
@@ -81,7 +99,7 @@ const positions = [
     },
     {
         type: "defense",
-        nom: "Rusher",
+        nom: "Rusher (R)",
         image: "/assets/images/flag/rusher.png",
         description: "Le sprinteur défensif qui part à pleine vitesse dès le snap pour gêner ou stopper le QB."
     },
@@ -93,7 +111,7 @@ const positions = [
     },
     {
         type: "defense",
-        nom: "Safety",
+        nom: "Safety (S)",
         image: "/assets/images/flag/safety.png",
         description: "Dernière ligne de défense. Il lit le jeu et intervient pour couvrir les passes longues ou soutenir contre la course."
     },

@@ -131,7 +131,7 @@ export default function Resultats() {
 
                                                 <div style={{ textAlign: "center", fontWeight: 700 }}>
                                                     <span style={{ color: winner === "a" ? "var(--orange-color)" : "#fff" }}>{match.team_a.score}</span> -
-                                                    <span style={{ color: winner === "b" ? "var(--orange-color)" : "#fff" }}>{match.team_b.score}</span>
+                                                    <span style={{ color: winner === "b" ? "var(--orange-color)" : "#fff" }}> {match.team_b.score}</span>
                                                 </div>
 
                                                 <div style={{ display: "flex", alignItems: "center", gap: 10, fontWeight: winner === "b" ? 700 : 500 }}>

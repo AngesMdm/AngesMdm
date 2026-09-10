@@ -273,6 +273,10 @@ export default function Calendar() {
                         <Image src="/assets/images/foot-junior.svg" alt="" width={20} height={20} />
                         <span>Football Américain Junior</span>
                     </div>
+                    <div className="legend-item">
+                        <Image src="/assets/images/cheerbow.png" alt="" width={20} height={20} />
+                        <span>Cheerleading</span>
+                    </div>
                 </div>
 
             </section>

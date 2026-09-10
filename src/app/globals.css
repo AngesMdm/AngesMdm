@@ -74,3 +74,110 @@ h2, p{
     stroke-dashoffset: 0;
   }
 }
+
+
+/* SECTION REJOINDRE */
+
+.foot-join-cta, .cta-container, .cta-button-glow {
+  box-sizing: border-box;
+}
+
+.foot-join-cta {
+  padding: 4rem 1rem;
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(to bottom, transparent, rgba(226, 96, 16, 0.05), transparent);
+}
+
+.cta-container {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 2.5rem;
+  border-radius: 2rem;
+  max-width: 900px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.cta-content h2 {
+  font-size: 2.2rem;
+  margin: 0 0 0.5rem 0;
+  color: #fff;
+  text-align: left;
+}
+
+.cta-content p {
+  font-size: 1.1rem;
+  color: #aaa;
+  margin: 0;
+  text-align: left;
+}
+
+.cta-button-glow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--orange-color);
+  color: white;
+  text-decoration: none;
+  padding: 1.2rem 2.5rem;
+  border-radius: 5rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  white-space: nowrap;
+  box-shadow: 0 0 20px rgba(226, 96, 16, 0.4);
+  overflow: hidden;
+}
+
+.cta-button-glow:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 35px rgba(226, 96, 16, 0.6);
+  background: #ff721a;
+}
+
+.cta-icon {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.cta-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.cta-button-glow:hover .cta-icon {
+  transform: translateX(5px);
+}
+
+@media (max-width: 768px) {
+  .cta-container {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  
+  .cta-content h2 {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+
+  .cta-content p {
+    text-align: center;
+  }
+  
+  .cta-button-glow {
+    width: 100%;
+    justify-content: center;
+    padding: 1.2rem;
+    font-size: 1.1rem;
+  }
+}

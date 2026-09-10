@@ -3,6 +3,7 @@
 import "@/styles/cheer.css";
 import RevealCascade from "@/components/RevealOnSCroll";
 import Slider from "@/components/Slider";
+import Link from "next/link";
 
 export default function CheerPage() {
     return (
@@ -15,6 +16,23 @@ export default function CheerPage() {
                         Il développe coordination, force, confiance et synchronisation.
                     </p>
                 </div>
+            </section>
+
+            <section className="foot-join-cta">
+                <RevealCascade index={0}>
+                    <div className="cta-container">
+                        <div className="cta-content">
+                            <h2>Prêt à relever le défi ?</h2>
+                            {/* <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p> */}
+                        </div>
+                        <Link href="/nous-rejoindre" className="cta-button-glow">
+                            <span>Nous rejoindre</span>
+                            <div className="cta-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                            </div>
+                        </Link>
+                    </div>
+                </RevealCascade>
             </section>
 
             <section className="cheer-disciplines">
@@ -44,7 +62,7 @@ const disciplines = [
     {
         nom: "Stunts",
         image: "/assets/images/cheer/stunt.png",
-        description: "Figures acrobatiques en groupe où une base soulève un flyer. Demande force et coordination."
+        description: "Figures acrobatiques en groupe où une base soulève une fly. Demande force et coordination."
     },
     {
         nom: "Tumbling",
@@ -54,7 +72,7 @@ const disciplines = [
     {
         nom: "Jumps",
         image: "/assets/images/cheer/jumps.png",
-        description: "Sauts dynamiques réalisés en synchronisation. Vitesse, explosivité et esthétique sont clés."
+        description: "Sauts dynamiques réalisés en synchronisation. Vitesse, explosivité et esthétique sont les clés."
     },
     {
         nom: "Dance",

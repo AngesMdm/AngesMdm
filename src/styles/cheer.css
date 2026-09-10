@@ -8,7 +8,7 @@
 .cheer-hero {
   background: linear-gradient(180deg, var(--background-soft), transparent),
               url('/assets/cheer/banner.jpg') center/cover no-repeat;
-  padding: 10rem 2rem 6rem;
+  padding: 10rem 2rem 0rem;
   text-align: center;
 }
 
@@ -28,7 +28,7 @@
 
 /* DISCIPLINES */
 .cheer-disciplines {
-  padding: 6rem 2rem;
+  padding: 3rem 2rem 6rem 2rem;
   text-align: center;
 }
 

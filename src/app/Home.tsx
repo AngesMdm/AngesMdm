@@ -313,3 +313,6 @@ export default function Home() {
         </div>
     );
 }
+//TODO card foot special pas meme taille
+// + sur footer
+// bouton en plein milieu plutot que espace

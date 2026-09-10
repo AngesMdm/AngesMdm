@@ -435,7 +435,7 @@ export default function Drive() {
         <main style={{ padding: "1rem", marginTop: "5rem", minHeight: "700px", backgroundColor: "var(--background)", color: "var(--main-color)" }}>
             <h1>Mon Drive</h1>
 
-            <div style={{ marginBottom: "1rem", display: "flex", gap: "0.5rem", alignItems: "center" }}>
+            {/* <div style={{ marginBottom: "1rem", display: "flex", gap: "0.5rem", alignItems: "center" }}>
                 <input
                     type="text"
                     placeholder="Rechercher..."
@@ -446,7 +446,7 @@ export default function Drive() {
                 <button onClick={handleSearch} style={{ padding: "0.5rem 1rem", backgroundColor: "var(--orange-color)", color: "white", borderRadius: "6px", cursor: "pointer" }}>
                     🔍
                 </button>
-            </div>
+            </div> */}
             <div style={{ marginBottom: "1rem", display: "flex", alignItems: "center", gap: "1rem" }}>
                 <button onClick={goBack} disabled={pathStack.length === 1} style={{ padding: "0.5rem 1rem", backgroundColor: pathStack.length === 1 ? "#ccc" : "var(--orange-color)", color: "white", border: "none", borderRadius: "6px", cursor: pathStack.length === 1 ? "not-allowed" : "pointer" }}>
                     ← Retour
