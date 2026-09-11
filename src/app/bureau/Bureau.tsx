@@ -8,7 +8,7 @@ const presidents = [
     { name: "Tony Graziani", role: "CO-PRÉSIDENT / TRÉSORIER", image: "/assets/images/staff&bureau/tony2.png" },
 ];
 
-const secretaire = { name: "Magalie Calderon", role: "SECRÉTAIRE", image: "/assets/images/staff&bureau/mag.png" };
+const secretaire = { name: "Magalie Calderon", role: "SECRÉTAIRE", image: "/assets/images/staff&bureau/mag2.png" };
 
 const membres = [
     { name: "Pierre Baudoin", role: "MEMBRE", image: "/assets/images/staff&bureau/pierre.png" },
